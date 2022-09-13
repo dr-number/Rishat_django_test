@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin_panel'),
     path('', include('APIStripe.urls')),
     path('basket/', include('basket.urls')),
+    path('user/', include('custom_user.urls')),
 ]

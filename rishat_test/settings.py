@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'main',
     'APIStripe',
-    'basket'
+    'basket',
+    'custom_user',
 ]
 
 MIDDLEWARE = [
@@ -158,6 +159,8 @@ def show_toolbar(request):
 DEBUG_TOOLBAR_CONFIG = {
   "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
 }
+
+LOGIN_REDIRECT_URL = 'products'
 
 STRIPE_PUBLIC_KEY = "pk_test_51LgR6IHVRJovbZDJEifEzGWqm5oSz8d6XlLpLMHYrdRPi5NeZb251Vqe7SzwouLYhtlvBYZIebzm6hnDPfK5jPNT00NNFTs3Zl"
 STRIPE_SECRET_KEY = "sk_test_51LgR6IHVRJovbZDJrxuLBVgnlrkWu2TN0Bi8hHgJdTVu8sAWeEAblYwfzq35k6XjkFJaTLl3eMmtVp7DRn3alf7G004fdPIpbf"
