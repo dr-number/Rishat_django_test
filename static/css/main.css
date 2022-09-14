@@ -7262,4 +7262,16 @@ a.text-dark:hover, a.text-dark:focus {
   width: 50px;
   text-align: center; }
 
+#profile-popup-btn {
+  font-weight: bold; }
+
+.profile-popup {
+  position: absolute;
+  right: 45px;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid black;
+  background-color: #fff;
+  padding: 5px; }
+
 /*# sourceMappingURL=main.css.map */

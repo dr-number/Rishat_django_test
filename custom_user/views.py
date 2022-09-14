@@ -56,9 +56,9 @@ class Authorization(TemplateView):
             login(request,user)
             return redirect(reverse('products'))
        
-        return render(request, self.template_name, {'form': AuthorizationForm()})
+        return render(request, self.template_name, {'form': AuthorizationForm(request.POST)})
 
 def signout(request):
     logout(request)
-    return redirect('custom_user/authorisation.html')
+    return redirect(reverse('products'))
 

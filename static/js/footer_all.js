@@ -165,3 +165,37 @@ document.querySelectorAll(".basket-remove, .basket-add").forEach(button => {
     
     }
 });
+
+
+class Profile{
+
+    #profilePopupBtn = document.getElementById("profile-popup-btn");
+    #profilePopup = document.querySelector(".profile-popup")
+
+    constructor(){
+        this.#popup()
+    }
+
+    #popup(){
+
+        if(this.#profilePopupBtn)
+            this.#profilePopupBtn.onclick = () => {
+                this.#profilePopup.classList.toggle("d-none");
+            }
+    }
+
+    getProfilePopupBtnId(){
+        return this.#profilePopupBtn.getAttribute("id");
+    }
+
+    hidePopup(){
+        this.#profilePopup.classList.add("d-none");
+    }
+}
+
+const profile = new Profile();
+document.addEventListener('click', function(e) {
+    if (e.target.id != profile.getProfilePopupBtnId()) {
+      profile.hidePopup();
+    }
+  });
