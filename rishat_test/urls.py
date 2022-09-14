@@ -22,4 +22,5 @@ urlpatterns = [
     path('', include('APIStripe.urls')),
     path('basket/', include('basket.urls')),
     path('user/', include('custom_user.urls')),
+    path('favorites/', include('favorites.urls')),
 ]

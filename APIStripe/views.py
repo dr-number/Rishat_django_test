@@ -1,6 +1,5 @@
-from array import array
-from itertools import count
 import stripe
+from django.shortcuts import render
 from django.conf import settings
 from django.views import View
 from django.http import JsonResponse
@@ -11,6 +10,8 @@ import json
 
 
 from APIStripe.models import Item
+from favorites.models import FavoritesItem
+
 from main.functions import getCurrentHost
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -104,21 +105,37 @@ class ProductItem(TemplateView):
 class Products(TemplateView):
     template_name = "APIStripe/products.html"
 
-    def get_context_data(self, **kwargs):
-        products = Item.objects.all()
+    def get(self, request, *args, **kwargs):
 
         html = ""
+        favorites = None
+        is_authenticated = request.user.is_authenticated
+
+        products = Item.objects.all()
+
+        if is_authenticated:
+            favorites = FavoritesItem.objects.filter(id=request.user.id).values('products_id').first()
+            favorites = FavoritesItem.getIds(favorites)
+        
 
         for item in products:
+
+            if len(favorites) == 0 or item.id in favorites: 
+                status_favorites = 'on'
+                status_favorites_style = 'off'
+            else:
+                status_favorites = 'off'
+                status_favorites_style = 'on'
+
+
             html += render_to_string('APIStripe/item.html', {
-                'item' : item
+                'item' : item,
+                'is_authenticated' : is_authenticated,
+                'status_favorites' : status_favorites,
+                'status_favorites_style' : status_favorites_style
             })
 
-        context = super(Products, self).get_context_data(**kwargs)
-        context.update({
-            "products" : html,
-            "count" : products.count()
-        })
-
-        return context
-
+        return render(request, self.template_name, {
+            'products' : html,
+            'count' : len(products)
+            })

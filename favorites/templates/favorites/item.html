@@ -1,9 +1,9 @@
-<div class="product" data-product-id="{{item.id}}">
+<div class="product" product-id="{{item.id}}">
     <div class="name">{{ item.name }}</div>
     <div class="description">{{ item.description }}</div>
     <div class="price">{{ item.get_price }}</div>
 
     <button type="submit" class="basket-remove btn btn-danger" data-product-id="{{item.id}}" data-type-change="0">-</button>
-    <input class="count-in-basket" type="text" value="{{count}}" readonly />
+    <input class="count-in-basket" type="text" value="{{item.count}}" readonly />
     <button type="submit" class="basket-add btn btn-danger" data-product-id="{{item.id}}" data-type-change="1">+</button>
 </div>

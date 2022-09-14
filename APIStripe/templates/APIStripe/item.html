@@ -1,9 +1,18 @@
-<div class="product">
+{% load static %}
+
+<div class="product" data-type-change="{{status_favorites}}" data-product-id="{{item.id}}">
     <div class="name">{{ item.name }}</div>
     <div class="description">{{ item.description }}</div>
     <div class="price">{{ item.get_price }}</div>
 
-    <button type="submit" id="{{item.id}}" class="checkout-button btn btn-success">Buy</button>
+    {% if is_authenticated %}
+    <div class="change-favorites">
+        <svg class="ico ico-favorites-{{status_favorites_style}}">
+            <use xlink:href="{% static 'svg/sprite.svg' %}#favorites--res_svg--favorites"></use>
+        </svg>
+    </div>
+    {% endif %}
 
+    <button type="submit" id="{{item.id}}" class="checkout-button btn btn-success">Buy</button>
     <button type="submit" class="basket-button btn btn-danger" data-product-id="{{item.id}}" data-type-change="1">Add to basket</button>
 </div>

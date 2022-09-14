@@ -25,12 +25,17 @@
           <a class="p-2 text-dark" href="{% url 'products' %}">All products</a>
           <a class="p-2 text-dark" href="{% url 'basket' %}">Basket</a>
 
-          {% if not request.user.is_authenticated %}
-            <a class="p-2 text-dark" href="{% url 'registration' %}">Registration</a>
-            <a class="p-2 text-dark" href="{% url 'authorization' %}">Authorization</a>
-          {% else %}
+          {% if request.user.is_authenticated %}
+            <a class="p-2 text-dark" href="{% url 'favorites' %}">
+              <svg class="ico ico-favorites-on">
+                <use xlink:href="{% static 'svg/sprite.svg' %}#favorites--res_svg--favorites"></use>
+              </svg>
+            </a>
             <a class="p-2 text-dark" id="profile-popup-btn" href="#">{{ user.username }}</a>
             {% include 'custom_user/inclides/popup_profile.html' %}
+          {% else %}
+            <a class="p-2 text-dark" href="{% url 'registration' %}">Registration</a>
+            <a class="p-2 text-dark" href="{% url 'authorization' %}">Authorization</a>
           {% endif %}
 
         </nav>

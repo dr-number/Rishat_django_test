@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'APIStripe',
     'basket',
     'custom_user',
+    'favorites'
 ]
 
 MIDDLEWARE = [

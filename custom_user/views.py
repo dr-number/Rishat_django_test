@@ -1,7 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from APIStripe.views import Products
 from custom_user.forms import RegistrationForm, AuthorizationForm
 from custom_user.models import UserCustom
 from django.views.generic import TemplateView

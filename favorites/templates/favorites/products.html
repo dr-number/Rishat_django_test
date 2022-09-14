@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{{ title }}
+
+{% block content %}
+
+<div class="container">
+    {% if products %}
+        {{ products | safe}}
+        Count type products: <b>{{count_type}}</b>
+        <button type="submit" class="basket-buy-all btn btn-success">Buy all</button>
+    {% else %}
+        <p class="no-products">No products in favorites!</p>
+    {% endif %}
+</div>
+
+{% endblock %}
