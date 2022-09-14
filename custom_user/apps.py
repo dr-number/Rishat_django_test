@@ -4,3 +4,7 @@ from django.apps import AppConfig
 class CustomUserConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'custom_user'
+
+    def ready(self):
+        # noinsperction PyOnresolvedReferences
+        import custom_user.signals

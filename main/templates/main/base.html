@@ -22,8 +22,11 @@
         <nav class="my-2 my-md-0 mr-md-3">
 
           <a class="p-2 text-dark" href="/admin">Admin panel</a>
-          <a class="p-2 text-dark" href="/">All products</a>
-          <a class="p-2 text-dark" href="/basket">Basket</a>
+          <a class="p-2 text-dark" href="{% url 'products' %}">All products</a>
+          <a class="p-2 text-dark" href="{% url 'basket' %}">Basket</a>
+
+          <a class="p-2 text-dark" href="{% url 'registration' %}">Registration</a>
+          <a class="p-2 text-dark" href="{% url 'authorization' %}">Authorization</a>
 
         </nav>
       </div>
@@ -36,7 +39,7 @@
             <footer class="pt-4 my-md-5 pt-md-5 border-top">
                 <div class="row">
                 <div class="col-12 col-md">
-                  
+
                 </div>
 
             </footer>

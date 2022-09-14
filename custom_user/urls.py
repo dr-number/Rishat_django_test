@@ -3,12 +3,14 @@ from django.urls import path
 
 
 from custom_user.views import (
-    authorization
+    Registration,
+    Authorization,
+    signout
     )
 
 
-
 urlpatterns = [
-    path('authorization/', authorization, name='authorization'),
-    # path('authorization/', Change.as_view(), name='authorization'),
+    path('registration/', Registration.as_view(), name='registration'),
+    path('authorization/', Authorization.as_view(), name='authorization'),
+    path('signout/', signout, name='signout'),
 ]
