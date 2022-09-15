@@ -39,18 +39,20 @@ class Change(View):
     def post(self, request, *args, **kwargs):
 
         data_post = json.load(request)
+
         product_id = data_post["productId"]
         type_change = data_post["typeChange"]
+        
+        user_id = request.user.id
 
-        favorites = FavoritesItem.objects.filter(id=request.user.id).values('products_id').first()
-        ids = FavoritesItem.getIds(favorites)
-
+        ids = FavoritesItem.getIds(user_id=user_id)
+        
         if type_change == self.__ADD_TO_FAFORITE:
             ids.append(product_id)
         else:
             ids.remove(product_id)
 
-        if FavoritesItem.setIds(request.user.id, ids):
+        if FavoritesItem.setIds(user_id, ids):
             status = 'success'
         else:
             status = 'failed'

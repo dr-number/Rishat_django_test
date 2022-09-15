@@ -114,18 +114,16 @@ class Products(TemplateView):
         products = Item.objects.all()
 
         if is_authenticated:
-            favorites = FavoritesItem.objects.filter(id=request.user.id).values('products_id').first()
-            favorites = FavoritesItem.getIds(favorites)
+            favorites = FavoritesItem.getIds(user_id=request.user.id)
         
-
         for item in products:
 
-            if len(favorites) == 0 or item.id in favorites: 
-                status_favorites = 'on'
-                status_favorites_style = 'off'
-            else:
+            if favorites and (len(favorites) == 0 or str(item.id) in favorites): 
                 status_favorites = 'off'
                 status_favorites_style = 'on'
+            else:
+                status_favorites = 'on'
+                status_favorites_style = 'off'
 
 
             html += render_to_string('APIStripe/item.html', {

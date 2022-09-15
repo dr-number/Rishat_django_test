@@ -1,26 +1,32 @@
+import json
 from django.db import models
 
 class FavoritesItem(models.Model):
     user_id = models.IntegerField()
-    products_id = models.CharField(max_length=255, default="")
+    products_id = models.JSONField(null=True)
 
-    def getIds(str):
-        if not str:
-            return []
+    def getIds(user_id):
+        favorites = FavoritesItem.objects.filter(user_id=user_id).values('products_id').first()
 
-        return str.split(':')
+        if favorites:
+            favorites = favorites.get('products_id')
+            return json.loads(favorites)
+
+        return []
 
     def setIds(user_id, array):
         
         if not array:
             return None
 
-        array = list(dict.fromkeys(array))
+        updated_values = {
+            'products_id' : json.dumps(list(dict.fromkeys(array)))
+            }
 
-        favorits = FavoritesItem(
+        result = FavoritesItem.objects.update_or_create(
             user_id = user_id,
-            products_id = list(dict.fromkeys(array)))
+            defaults = updated_values
+        )
 
-        favorits.save()
-        return favorits.id
+        return result[0].pk
 
