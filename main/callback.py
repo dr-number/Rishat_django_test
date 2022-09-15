@@ -25,7 +25,12 @@ def render_button_ajax_modal(request, modal_id, text, classes = '', params = '',
         'rerender_always' : rerender_always
     })
 
-def render_button_ajax_modal_svg(request, modal_id, svg, svg_classes = '', classes = '', params = '', buttom_id = '', custom_title = '', rerender_always = '', app_name = '', run_after_init = ''):
+def render_button_ajax_modal_svg(request, modal_id, 
+    svg, svg_classes = '', classes = '', 
+    params = '', buttom_id = '', 
+    custom_title = '', 
+    rerender_always = '', app_name = '', 
+    run_after_init = '', run_after_close = ''):
 
     if not app_name:
         app_name = get_app_name(request)
@@ -40,7 +45,8 @@ def render_button_ajax_modal_svg(request, modal_id, svg, svg_classes = '', class
         'buttom_id' : buttom_id,
         'custom_title' : custom_title,
         'rerender_always' : rerender_always,
-        'run_after_init' : run_after_init
+        'run_after_init' : run_after_init,
+        'run_after_close' : run_after_close
     })
 
 def prepare_arguments_function(params):

@@ -30,17 +30,21 @@ class Modals{
             
     }
 
+    closeModal(modal){
+        modal.style.display = "none";
+    }
+
     #openModal(modal){
         modal.style.display = "block";
 
         modal.querySelector('.close_modal_window').onclick = function () {
-            modal.style.display = "none";
+            closeModal(modal)
         }
 
         window.onclick = function (event) {
 
             if (event.target == modal) 
-                modal.style.display = "none";
+                closeModal(modal)
         }
     }
 

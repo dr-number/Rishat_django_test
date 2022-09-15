@@ -252,56 +252,41 @@ class Favorites{
 
 
     deleteFromFavorite(){
-        alert("z");
-        return
 
-        let product, icoClassList;
-        const changeFavorites = document.querySelectorAll(".change-favorites");
+        const modalFavorite = document.querySelector(".modal-favorite");
 
-        if(changeFavorites){
-            changeFavorites.forEach(button => {
+        if(!modalFavorite){
+            return
+        }
 
-                button.onclick = () => {
+        runInServerFetch("delete", getParams(modalFavorite))
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(result){
 
-                    product = button.closest(".product");
-                    
-                    runInServerFetch("favorites/change", getParams(product))
-                        .then(function(response){
-                            return response.json();
-                        })
-                        .then(function(result){
-                
-                            if(result.status == "success"){
-                                icoClassList = button.querySelector(".ico").classList;
+                if(result.error){
+                    alert(result.error.message);
+                    return;
+                }
+    
+                if(result.status == "success"){
+                    const productId = modalFavorite.dataset.productId;
+                    const item = document.querySelector('[product-id="' + productId + '"]');
 
-                                if(product.getAttribute("data-type-change") == "on"){
-                                    product.setAttribute("data-type-change", "off");
-                                    icoClassList.remove("ico-favorites-off");
-                                    icoClassList.add("ico-favorites-on");
-                                }
-                                else{
-                                    product.setAttribute("data-type-change", "on");
-                                    icoClassList.remove("ico-favorites-on");
-                                    icoClassList.add("ico-favorites-off");
-                                }
-                            }
-                            else
-                                console.error("Favorite error change");    
-                            
-                        })
-                        .then(function(result){
-                
-                            if(result.error){
-                                alert(result.error.message);
-                            }
-                        })
-                        .catch(function(error){
-                            console.error("Error: ", error);
-                        });
+                    if(item){
+                        item.parentNode.removeChild(item);
+                        document.getElementById("count-type").innerHTML -= 1;
+                    }
 
                 }
+                else
+                    console.error("Favorite error delete");    
+                
+            })
+            .catch(function(error){
+                console.error("Error: ", error);
             });
-        }
     }
 }
 
@@ -338,17 +323,21 @@ class Modals{
             
     }
 
+    closeModal(modal){
+        modal.style.display = "none";
+    }
+
     #openModal(modal){
         modal.style.display = "block";
 
         modal.querySelector('.close_modal_window').onclick = function () {
-            modal.style.display = "none";
+            closeModal(modal)
         }
 
         window.onclick = function (event) {
 
             if (event.target == modal) 
-                modal.style.display = "none";
+                closeModal(modal)
         }
     }
 
@@ -514,8 +503,14 @@ class Question{
             listElements.forEach(button => {
                 button.onclick = () => {
 
-                if(button.hasAttribute("function"))
-                        eval(button.getAttribute("function"))
+                    if(button.hasAttribute("function")){
+                        eval(button.getAttribute("function"));
+
+                        const modal = button.closest(".modal")
+
+                        if(modal)
+                            modal.style.display = "none";
+                    }
 
                 }
             });

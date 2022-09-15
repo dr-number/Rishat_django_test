@@ -8,8 +8,14 @@ class Question{
             listElements.forEach(button => {
                 button.onclick = () => {
 
-                if(button.hasAttribute("function"))
-                        eval(button.getAttribute("function"))
+                    if(button.hasAttribute("function")){
+                        eval(button.getAttribute("function"));
+
+                        const modal = button.closest(".modal")
+
+                        if(modal)
+                            modal.style.display = "none";
+                    }
 
                 }
             });

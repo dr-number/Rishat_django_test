@@ -7,7 +7,7 @@
 <div class="container">
     {% if products %}
         {{ products | safe}}
-        Count type products: <b>{{count_type}}</b>
+        Count type products: <b id="count-type">{{count_type}}</b>
         <button type="submit" class="basket-buy-all btn btn-success">Buy all</button>
     {% else %}
         <p class="no-products">No products in favorites!</p>

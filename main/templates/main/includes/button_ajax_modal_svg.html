@@ -6,6 +6,7 @@
         {% if params %}data-params="{{ params }}"{% endif %}
         {% if custom_title %}data-title="{{ custom_title }}"{% endif %}
         {% if run_after_init %}data-run-after-init="{{ run_after_init }}"{% endif %}
+        {% if run_after_close %}data-run-after-close="{{ run_after_close }}"{% endif %}
         {% if rerender_always %}data-rerender-always="1"{% endif %}>
         <svg class="{{svg_class}}">
                 <use xlink:href="{% static 'svg/sprite.svg' %}{{svg}}"></use>
