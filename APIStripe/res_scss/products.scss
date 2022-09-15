@@ -5,6 +5,16 @@
 
 .product{
 
+    padding: 5px;
+
+    &:hover{
+        background-color: #f3f3f3;
+    }
+
+    &:not(:first-child){
+        border-top: #e5e5e5 1px solid;
+    }
+
     div{
         display: inline-block;
     }

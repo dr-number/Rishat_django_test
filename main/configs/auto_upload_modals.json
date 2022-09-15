@@ -1,0 +1,11 @@
+{
+    "messager" : [
+        {
+            "id" : "modal_hello",
+            "title" : "hello",
+            "for_url": [
+                "messager"
+            ]
+        }
+    ]
+}

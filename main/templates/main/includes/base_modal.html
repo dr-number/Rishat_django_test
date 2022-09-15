@@ -1,0 +1,22 @@
+<div id="{% if name_modal %}{{name_modal}}{% else %}error-modal{% endif %}" class="modal">
+    <div class="modal_content">
+        <span class="close_modal_window">×</span>
+
+            {% if name_modal %}
+                <div class="title">
+
+                    {% if custom_title %}
+                        {{ custom_title }}
+                    {% else %}
+                        {% block title %}{% endblock title %}
+                    {% endif %}
+
+                </div>
+                {% block content %}{% endblock content %}
+            {% else %}
+                <div class="title">Error!</div>
+                {% include "main/includes/modal_error.html" %}
+            {% endif %}
+            
+    </div>
+</div>

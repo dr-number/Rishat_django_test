@@ -5,8 +5,10 @@ from django.template.loader import render_to_string
 from django.views.generic import TemplateView
 from django.views import View
 from django.http import JsonResponse
+from APIStripe.models import Item
 
 from favorites.models import FavoritesItem
+from main.callback import render_button_ajax_modal_svg
 
 
 class Favorites(TemplateView):
@@ -17,15 +19,35 @@ class Favorites(TemplateView):
         if not request.user.is_authenticated:
             return redirect(reverse('products'))
 
-        products = FavoritesItem.objects.filter(user_id=request.user.id)
-
         html = ""
 
-        for item in products:
+        ids = FavoritesItem.getIds(user_id=request.user.id)
 
-            html += render_to_string('favorites/item.html', {
-                'item' : item
-            })
+        if ids:
+            products = Item.objects.filter(id__in=ids)
+
+            for item in products:
+
+                html += render_to_string('favorites/item.html', {
+                    'item' : item,
+                    'delete' : render_button_ajax_modal_svg(
+                        request=request, 
+                        modal_id="delete",
+                        svg="#main--res_svg--delete",
+                        svg_classes="ico",
+                        classes="favorite-delete btn",
+                        rerender_always=True,
+                        run_after_init="question.init()",
+                        params={
+                            "question" : "Do you want to remove an item from your favorites?",
+                            "id" : str(item.id),
+                            "name" : item.name,
+                            "price" : str(item.price),
+                            "f_yes" : "favorites.deleteFromFavorite()",
+                            "f_no" : "no"
+                            }
+                        )
+                })
 
         return render(request, self.template_name, {
             'products' : html,
@@ -42,7 +64,7 @@ class Change(View):
 
         product_id = data_post["productId"]
         type_change = data_post["typeChange"]
-        
+
         user_id = request.user.id
 
         ids = FavoritesItem.getIds(user_id=user_id)
@@ -60,5 +82,28 @@ class Change(View):
 
         return JsonResponse({
             'type': str(type_change),
+            'status': status
+        })
+
+
+class Delete(View):
+
+    def post(self, request, *args, **kwargs):
+
+        data_post = json.load(request)
+        product_id = data_post["productId"]
+
+        user_id = request.user.id
+
+        ids = FavoritesItem.getIds(user_id=user_id)
+        ids.remove(product_id)
+
+        if FavoritesItem.setIds(user_id, ids):
+            status = 'success'
+        else:
+            status = 'failed'
+
+
+        return JsonResponse({
             'status': status
         })

@@ -1,0 +1,13 @@
+{% load static %}
+<button {% if buttom_id %}id="{{ buttom_id }}"{% endif %}
+        class="oepn-modal {{ classes }}" 
+        data-modal_id="{{ modal_id }}" 
+        data-app_name="{{ app_name }}"
+        {% if params %}data-params="{{ params }}"{% endif %}
+        {% if custom_title %}data-title="{{ custom_title }}"{% endif %}
+        {% if run_after_init %}data-run-after-init="{{ run_after_init }}"{% endif %}
+        {% if rerender_always %}data-rerender-always="1"{% endif %}>
+        <svg class="{{svg_class}}">
+                <use xlink:href="{% static 'svg/sprite.svg' %}{{svg}}"></use>
+        </svg>
+</button>

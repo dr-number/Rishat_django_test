@@ -55,6 +55,13 @@
             </footer>
         </div>
 
+
+    <div id="ajax-modals">
+        {{ajax_modals}}
+        {% include 'main/includes/base_modal.html' %} {% comment %} <-- This error modal {% endcomment %}
+        {% include 'main/indicator_loader.html' %}
+    </div>    
+
     <script src="{% static 'js/footer_all.js' %}"></script>
 </body>
 </html>
