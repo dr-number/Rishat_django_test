@@ -37,14 +37,14 @@ class Modals{
     #openModal(modal){
         modal.style.display = "block";
 
-        modal.querySelector('.close_modal_window').onclick = function () {
-            closeModal(modal)
+        modal.querySelector('.close_modal_window').onclick = () => {
+            this.closeModal(modal);
         }
 
-        window.onclick = function (event) {
+        window.onclick = (event) => {
 
             if (event.target == modal) 
-                closeModal(modal)
+                this.closeModal(modal);
         }
     }
 

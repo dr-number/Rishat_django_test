@@ -16,9 +16,6 @@ class FavoritesItem(models.Model):
 
     def setIds(user_id, array):
         
-        if not array:
-            return None
-
         updated_values = {
             'products_id' : json.dumps(list(dict.fromkeys(array)))
             }

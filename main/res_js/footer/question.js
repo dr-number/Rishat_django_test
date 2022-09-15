@@ -11,10 +11,10 @@ class Question{
                     if(button.hasAttribute("function")){
                         eval(button.getAttribute("function"));
 
-                        const modal = button.closest(".modal")
+                    const modal = button.closest(".modal")
 
-                        if(modal)
-                            modal.style.display = "none";
+                    if(modal)
+                        modal.style.display = "none";
                     }
 
                 }

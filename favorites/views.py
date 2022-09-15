@@ -20,6 +20,7 @@ class Favorites(TemplateView):
             return redirect(reverse('products'))
 
         html = ""
+        count_products = 0
 
         ids = FavoritesItem.getIds(user_id=request.user.id)
 
@@ -43,15 +44,17 @@ class Favorites(TemplateView):
                             "id" : str(item.id),
                             "name" : item.name,
                             "price" : str(item.price),
-                            "f_yes" : "favorites.deleteFromFavorite()",
-                            "f_no" : "no"
+                            "f_yes" : "favorites.deleteFromFavorite()"
                             }
                         )
                 })
 
+            if products:
+                count_products = len(products)
+
         return render(request, self.template_name, {
             'products' : html,
-            'count_type' : len(products)
+            'count_type' : count_products
             })
 
 

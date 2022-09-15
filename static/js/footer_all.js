@@ -276,7 +276,12 @@ class Favorites{
 
                     if(item){
                         item.parentNode.removeChild(item);
-                        document.getElementById("count-type").innerHTML -= 1;
+                        
+                        const countType = document.getElementById("count-type");
+                        countType.innerHTML -= 1;
+
+                        if(countType.innerHTML == '0')
+                            location.reload();
                     }
 
                 }
@@ -330,14 +335,14 @@ class Modals{
     #openModal(modal){
         modal.style.display = "block";
 
-        modal.querySelector('.close_modal_window').onclick = function () {
-            closeModal(modal)
+        modal.querySelector('.close_modal_window').onclick = () => {
+            this.closeModal(modal);
         }
 
-        window.onclick = function (event) {
+        window.onclick = (event) => {
 
             if (event.target == modal) 
-                closeModal(modal)
+                this.closeModal(modal);
         }
     }
 
@@ -506,10 +511,10 @@ class Question{
                     if(button.hasAttribute("function")){
                         eval(button.getAttribute("function"));
 
-                        const modal = button.closest(".modal")
+                    const modal = button.closest(".modal")
 
-                        if(modal)
-                            modal.style.display = "none";
+                    if(modal)
+                        modal.style.display = "none";
                     }
 
                 }

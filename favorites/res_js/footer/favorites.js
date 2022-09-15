@@ -80,7 +80,12 @@ class Favorites{
 
                     if(item){
                         item.parentNode.removeChild(item);
-                        document.getElementById("count-type").innerHTML -= 1;
+                        
+                        const countType = document.getElementById("count-type");
+                        countType.innerHTML -= 1;
+
+                        if(countType.innerHTML == '0')
+                            location.reload();
                     }
 
                 }
