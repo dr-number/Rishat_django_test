@@ -12,6 +12,7 @@ from APIStripe.models import Item
 from favorites.models import FavoritesItem
 
 from django.core.paginator import Paginator
+from main.constants import COUNT_PRODUCTS_ON_PAGE
 
 from main.functions import getCurrentHost
 
@@ -105,11 +106,9 @@ class ProductItem(TemplateView):
 
 class Products(TemplateView):
     template_name = "APIStripe/products.html"
-    COUNT_PRODUCTS_ON_PAGE = 10
 
     def get(self, request, *args, **kwargs):
 
-        html = ""
         favorites = None
         is_authenticated = request.user.is_authenticated
 
@@ -129,7 +128,7 @@ class Products(TemplateView):
                 item.status_favorites = 'on'
                 item.status_favorites_style = 'off'
 
-        paginator = Paginator(products, self.COUNT_PRODUCTS_ON_PAGE)
+        paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
         page_obj = paginator.get_page(request.GET.get('page'))
 
         return render(request, self.template_name, {

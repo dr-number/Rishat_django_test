@@ -1,14 +1,16 @@
 import json
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.template.loader import render_to_string
 from django.views.generic import TemplateView
 from django.views import View
 from django.http import JsonResponse
 from APIStripe.models import Item
 
 from favorites.models import FavoritesItem
-from main.callback import render_button_ajax_modal_svg
+
+from django.core.paginator import Paginator
+from main.callback import prepare_params
+from main.constants import COUNT_PRODUCTS_ON_PAGE
 
 
 class Favorites(TemplateView):
@@ -19,41 +21,49 @@ class Favorites(TemplateView):
         if not request.user.is_authenticated:
             return redirect(reverse('products'))
 
-        html = ""
         count_products = 0
-
         ids = FavoritesItem.getIds(user_id=request.user.id)
 
         if ids:
             products = Item.objects.filter(id__in=ids)
 
+            delete_button = {
+                "modal_id": "delete_favorites",
+                "svg": "#main--res_svg--delete",
+                "svg_classes": "ico",
+                "classes": "favorite-delete btn",
+                "rerender_always": "1",
+                "run_after_init": "question.init()",
+                "app_name": "favorites",
+                "params": ""
+            }
+
+            delete_from_modals_params = {
+                "question": "Do you want to remove an item from your favorites?",
+                "f_yes": "favorites.deleteFromFavorite()",
+                "id": "",
+                "name": "",
+                "price": ""
+            }
+
             for item in products:
 
-                html += render_to_string('favorites/item.html', {
-                    'item' : item,
-                    'delete' : render_button_ajax_modal_svg(
-                        request=request, 
-                        modal_id="delete_favorites",
-                        svg="#main--res_svg--delete",
-                        svg_classes="ico",
-                        classes="favorite-delete btn",
-                        rerender_always=True,
-                        run_after_init="question.init()",
-                        params={
-                            "question" : "Do you want to remove an item from your favorites?",
-                            "id" : str(item.id),
-                            "name" : item.name,
-                            "price" : str(item.price),
-                            "f_yes" : "favorites.deleteFromFavorite()"
-                            }
-                        )
-                })
+                delete_from_modals_params["id"] = str(item.id)
+                delete_from_modals_params["name"] = item.name
+                delete_from_modals_params["price"] = str(item.price)
 
+                delete_button["params"] = prepare_params(delete_from_modals_params)
+                item.data_delete = delete_button
+                    
             if products:
                 count_products = len(products)
 
+        
+        paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
+        page_obj = paginator.get_page(request.GET.get('page'))
+
         return render(request, self.template_name, {
-            'products' : html,
+            'page_obj' : page_obj,
             'count_type' : count_products
             })
 
