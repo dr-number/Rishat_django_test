@@ -5,8 +5,12 @@
 {% block content %}
 
 <div class="container">
-    {% if products %}
-        {{ products | safe}}
+    {% if page_obj %}
+        {% for product in page_obj %}
+            {%  include 'APIStripe/item.html' with item=product %}
+        {% endfor %}
+
+        {%  include 'main/includes/pagination.html' %}
         Count products: <b>{{count}}</b>
     {% else %}
         <p class="no-products">Not products!</p>

@@ -4,13 +4,14 @@ from django.conf import settings
 from django.views import View
 from django.http import JsonResponse
 from django.views.generic import TemplateView
-from django.template.loader import render_to_string
 from django.core.cache import cache
 import json
 
 
 from APIStripe.models import Item
 from favorites.models import FavoritesItem
+
+from django.core.paginator import Paginator
 
 from main.functions import getCurrentHost
 
@@ -104,6 +105,7 @@ class ProductItem(TemplateView):
 
 class Products(TemplateView):
     template_name = "APIStripe/products.html"
+    COUNT_PRODUCTS_ON_PAGE = 1
 
     def get(self, request, *args, **kwargs):
 
@@ -118,22 +120,19 @@ class Products(TemplateView):
         
         for item in products:
 
+            item.is_authenticated = is_authenticated
+
             if favorites and (len(favorites) == 0 or str(item.id) in favorites): 
-                status_favorites = 'off'
-                status_favorites_style = 'on'
+                item.status_favorites = 'off'
+                item.status_favorites_style = 'on'
             else:
-                status_favorites = 'on'
-                status_favorites_style = 'off'
+                item.status_favorites = 'on'
+                item.status_favorites_style = 'off'
 
-
-            html += render_to_string('APIStripe/item.html', {
-                'item' : item,
-                'is_authenticated' : is_authenticated,
-                'status_favorites' : status_favorites,
-                'status_favorites_style' : status_favorites_style
-            })
+        paginator = Paginator(products, self.COUNT_PRODUCTS_ON_PAGE)
+        page_obj = paginator.get_page(request.GET.get('page'))
 
         return render(request, self.template_name, {
-            'products' : html,
+            'page_obj' : page_obj,
             'count' : len(products)
             })

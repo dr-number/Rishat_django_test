@@ -1,13 +1,13 @@
 {% load static %}
 
-<div class="product" data-type-change="{{status_favorites}}" data-product-id="{{item.id}}">
+<div class="product" data-type-change="{{item.status_favorites}}" data-product-id="{{item.id}}">
     <div class="name">{{ item.name }}</div>
     <div class="description">{{ item.description }}</div>
     <div class="price">{{ item.get_price }}</div>
 
-    {% if is_authenticated %}
+    {% if item.is_authenticated %}
     <div class="change-favorites">
-        <svg class="ico ico-favorites-{{status_favorites_style}}">
+        <svg class="ico ico-favorites-{{item.status_favorites_style}}">
             <use xlink:href="{% static 'svg/sprite.svg' %}#favorites--res_svg--favorites"></use>
         </svg>
     </div>
