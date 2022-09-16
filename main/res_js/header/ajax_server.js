@@ -28,7 +28,7 @@ class AjaxServer{
             headers: {
                 'Accept' : 'application/json',
                 'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFToken' : this.#getCookie('csrftoken') //CSRF_TOKEN
+                'X-CSRFToken' : this.#getCookie('csrftoken')
             }
         };
 
@@ -39,3 +39,5 @@ class AjaxServer{
     }
 
 }
+
+const ajaxServer = new AjaxServer();

@@ -1,76 +1,117 @@
-const stripe = Stripe("pk_test_51LgR6IHVRJovbZDJEifEzGWqm5oSz8d6XlLpLMHYrdRPi5NeZb251Vqe7SzwouLYhtlvBYZIebzm6hnDPfK5jPNT00NNFTs3Zl")
+class APIStripe{
 
-document.querySelectorAll(".checkout-button").forEach(button => {
-    button.onclick = () => {
-        fetch("/buy/" + button.getAttribute("id") + "/", {
-            method: "GET"
-        })
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(session){
-
-            if(!session.error)
-                return stripe.redirectToCheckout({sessionId: session.id});
-            else
-                console.error("Session error: ", session.error);    
-        })
-        .then(function(result){
-
-            if(result.error){
-                alert(result.error.message);
-            }
-        })
-        .catch(function(error){
-            console.error("Error: ", error);
-        });
+    #stripe = undefined
+    
+    constructor(){
+        this.#stripe = Stripe("pk_test_51LgR6IHVRJovbZDJEifEzGWqm5oSz8d6XlLpLMHYrdRPi5NeZb251Vqe7SzwouLYhtlvBYZIebzm6hnDPfK5jPNT00NNFTs3Zl");
+        this.#initCheckOut();
+        this.#initBasketByAll();
     }
-})
 
-document.querySelectorAll(".basket-buy-all").forEach(button => {
-    button.onclick = () => {
+    #initCheckOut(){
+        document.querySelectorAll(".checkout-button").forEach(button => {
+            button.onclick = () => {
+                fetch("/buy/" + button.getAttribute("id") + "/", {
+                    method: "GET"
+                })
+                .then(function(response){
+                    return response.json();
+                })
+                .then((session) => {
 
-        const array = [];
-        const ids = [];
-        let name, price, count, item;
+                    if(!session.error)
+                        return this.#stripe.redirectToCheckout({sessionId: session.id});
+                    else
+                        console.error("Session error: ", session.error);    
+                })
+                .then(function(result){
 
-        document.querySelectorAll(".product").forEach(product => {
-
-            name = product.querySelector(".name").innerHTML;
-            price = Math.round(product.querySelector(".price").innerHTML * 100);
-            count = product.querySelector(".count-in-basket").value;
-
-            item = {
-                'price_data': {
-                    'currency': 'usd',
-                    'product_data': {
-                    'name': name,
-                    },
-                    'unit_amount': price,
-                },
-                'quantity': count,
+                    if(result.error){
+                        alert(result.error.message);
+                    }
+                });
             }
-
-            array.push(item);
-            ids.push(product.getAttribute("product-id"));
-
         })
+    }
 
-        const data = {
-            'ids' : ids,
-            'data' : array
-        };
+    #initBasketByAll(){
+        document.querySelectorAll(".basket-buy-all").forEach(button => {
+            button.onclick = () => {
 
-        runInServerFetch('buy_basket', data)
+                const array = [];
+                const ids = [];
+                let name, price, count, item;
+
+                document.querySelectorAll(".product").forEach(product => {
+
+                    name = product.querySelector(".name").innerHTML;
+                    price = Math.round(product.querySelector(".price").innerHTML * 100);
+                    count = product.querySelector(".count-in-basket").value;
+
+                    item = {
+                        'price_data': {
+                            'currency': 'usd',
+                            'product_data': {
+                            'name': name,
+                            },
+                            'unit_amount': price,
+                        },
+                        'quantity': count,
+                    }
+
+                    array.push(item);
+                    ids.push(product.getAttribute("data-product-id"));
+
+                })
+
+                const data = {
+                    'ids' : ids,
+                    'data' : array
+                };
+
+                ajaxServer.runInServerFetch('buy_basket', data)
+                    .then(function(response){
+                        return response.json();
+                    })
+                    .then((session) => {
+
+                        if(!session.error)
+                            return this.#stripe.redirectToCheckout({sessionId: session.id});
+                        else
+                            console.error("Session error: ", session.error);    
+                    })
+                    .then(function(result){
+
+                        if(result.error){
+                            alert(result.error.message);
+                        }
+                    });
+            }
+        })
+    }
+}
+
+const ApiStripe = new APIStripe();
+class Basket{
+
+    constructor(){
+        this.#init();
+    }
+
+    #changeBasket(url, button, countElem = undefined){
+
+        ajaxServer.runInServerFetch(url, ajaxServer.getParams(button))
             .then(function(response){
                 return response.json();
             })
-            .then(function(session){
+            .then(function(result){
 
-                if(!session.error)
-                    return stripe.redirectToCheckout({sessionId: session.id});
-                else
-                    console.error("Session error: ", session.error);    
+                if(result.status == 'success')
+                    if(countElem && result.count > 0)
+                        countElem.value = result.count
+                else{
+                    console.error("Basket error: ", result.error);    
+                }
             })
             .then(function(result){
 
@@ -81,90 +122,30 @@ document.querySelectorAll(".basket-buy-all").forEach(button => {
             .catch(function(error){
                 console.error("Error: ", error);
             });
+
     }
-})
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
+
+    #getCountElem(button){
+        return button.parentElement.querySelector(".count-in-basket");
     }
-    return cookieValue;
-}
 
-function getParams(element){
-    return JSON.parse(JSON.stringify(element.dataset));
-}
-
-function runInServerFetch(url, params=''){
-
-    const head = {
-        method: "POST",
-        credentials: 'same-origin',
-        headers: {
-            'Accept' : 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken' : getCookie('csrftoken') //CSRF_TOKEN
-        }
-    };
-
-    if(params != '')
-        head['body'] = JSON.stringify(params);
-
-    return fetch(url, head);
-}
-
-function changeBasket(url, button, countElem = undefined){
-
-    runInServerFetch(url, getParams(button))
-        .then(function(response){
-            return response.json();
-        })
-        .then(function(result){
-
-            if(result.status == 'success')
-                if(countElem && result.count > 0)
-                    countElem.value = result.count
-            else{
-                console.error("Basket error: ", result.error);    
+    #init(){
+        document.querySelectorAll(".basket-button").forEach(button => {
+            button.onclick = () => {
+                this.#changeBasket("basket/change", button);
             }
         })
-        .then(function(result){
 
-            if(result.error){
-                alert(result.error.message);
+        document.querySelectorAll(".basket-remove, .basket-add").forEach(button => {
+            button.onclick = () => {
+                this.#changeBasket("change", button, this.#getCountElem(button));    
             }
-        })
-        .catch(function(error){
-            console.error("Error: ", error);
         });
+    }
 
 }
 
-document.querySelectorAll(".basket-button").forEach(button => {
-    button.onclick = () => {
-        changeBasket("basket/change", button);
-    }
-})
-
-function getCountElem(button){
-    return button.parentElement.querySelector(".count-in-basket");
-}
-
-document.querySelectorAll(".basket-remove, .basket-add").forEach(button => {
-    button.onclick = () => {
-
-        changeBasket("change", button, getCountElem(button));
-    
-    }
-});
+new Basket();
 
 
 class Profile{
@@ -211,7 +192,7 @@ class Favorites{
 
                     product = button.closest(".product");
                     
-                    runInServerFetch("favorites/change", getParams(product))
+                    ajaxServer.runInServerFetch("favorites/change", ajaxServer.getParams(product))
                         .then(function(response){
                             return response.json();
                         })
@@ -259,7 +240,7 @@ class Favorites{
             return
         }
 
-        runInServerFetch("delete", getParams(modalFavorite))
+        ajaxServer.runInServerFetch("delete", ajaxServer.getParams(modalFavorite))
             .then(function(response){
                 return response.json();
             })
@@ -296,49 +277,6 @@ class Favorites{
 }
 
 const favorites = new Favorites();
-class AjaxServer{
-
-    #getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    getParams(element){
-        return JSON.parse(JSON.stringify(element.dataset));
-    }
-
-    runInServerFetch(url, params=''){
-
-        const head = {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept' : 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFToken' : this.#getCookie('csrftoken') //CSRF_TOKEN
-            }
-        };
-
-        if(params != '')
-            head['body'] = JSON.stringify(params);
-
-        return fetch(url, head);
-    }
-
-}
-const ajaxServer = new AjaxServer();
-
 document.addEventListener('click', function(e) {
     if (e.target.id != profile.getProfilePopupBtnId()) {
       profile.hidePopup();
@@ -346,10 +284,7 @@ document.addEventListener('click', function(e) {
   });
 class Modals{
 
-    #ajaxServer = undefined;
-
-    constructor(ajaxServer){
-        this.#ajaxServer = ajaxServer;
+    constructor(){
         this.#initButtons();
         this.#renderAutoUploadModals();
     }
@@ -423,7 +358,7 @@ class Modals{
 
                     this.openLoadIndicator();
 
-                    this.#ajaxServer.runInServerFetch('/render_modal_ajax/', this.#ajaxServer.getParams(button))
+                    ajaxServer.runInServerFetch('/render_modal_ajax/', ajaxServer.getParams(button))
                     .then(response => response.json())
                     .then((result) => {
                         
@@ -481,7 +416,7 @@ class Modals{
         else
             params = '';
 
-        this.#ajaxServer.runInServerFetch('/auto_upload_modals/',  params)
+        ajaxServer.runInServerFetch('/auto_upload_modals/',  params)
         .then(response => response.json())
         .then(function(result){
             
@@ -505,7 +440,7 @@ class Modals{
     }
 }
 
-const modals = new Modals(ajaxServer);
+const modals = new Modals();
 class Question{
 
     init(){

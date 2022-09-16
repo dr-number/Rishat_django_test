@@ -15,7 +15,7 @@ class Favorites{
 
                     product = button.closest(".product");
                     
-                    runInServerFetch("favorites/change", getParams(product))
+                    ajaxServer.runInServerFetch("favorites/change", ajaxServer.getParams(product))
                         .then(function(response){
                             return response.json();
                         })
@@ -63,7 +63,7 @@ class Favorites{
             return
         }
 
-        runInServerFetch("delete", getParams(modalFavorite))
+        ajaxServer.runInServerFetch("delete", ajaxServer.getParams(modalFavorite))
             .then(function(response){
                 return response.json();
             })

@@ -1,9 +1,6 @@
 class Modals{
 
-    #ajaxServer = undefined;
-
-    constructor(ajaxServer){
-        this.#ajaxServer = ajaxServer;
+    constructor(){
         this.#initButtons();
         this.#renderAutoUploadModals();
     }
@@ -77,7 +74,7 @@ class Modals{
 
                     this.openLoadIndicator();
 
-                    this.#ajaxServer.runInServerFetch('/render_modal_ajax/', this.#ajaxServer.getParams(button))
+                    ajaxServer.runInServerFetch('/render_modal_ajax/', ajaxServer.getParams(button))
                     .then(response => response.json())
                     .then((result) => {
                         
@@ -105,7 +102,7 @@ class Modals{
                         }
                         else{
                             this.#openModalError();
-                            console.error(result.error);///
+                            console.error(result.error);
                         }
                         
                     })
@@ -135,7 +132,7 @@ class Modals{
         else
             params = '';
 
-        this.#ajaxServer.runInServerFetch('/auto_upload_modals/',  params)
+        ajaxServer.runInServerFetch('/auto_upload_modals/',  params)
         .then(response => response.json())
         .then(function(result){
             
@@ -159,4 +156,4 @@ class Modals{
     }
 }
 
-const modals = new Modals(ajaxServer);
+const modals = new Modals();
