@@ -3,6 +3,7 @@
         data-modal_id="{{ modal_id }}" 
         data-app_name="{{ app_name }}"
         {% if params %}data-params="{{ params }}"{% endif %}
+        {% if run_after_init %}data-run-after-init="{{ run_after_init }}"{% endif %}
         {% if custom_title %}data-title="{{ custom_title }}"{% endif %}
         {% if rerender_always %}data-rerender-always="1"{% endif %}>
         {{text_button}}

@@ -3,7 +3,11 @@
 <div class="product" data-type-change="{{item.status_favorites}}" data-product-id="{{item.id}}">
     <div class="name">{{ item.name }}</div>
     <div class="description">{{ item.description }}</div>
-    <div class="price">{{ item.get_price }}</div>
+    
+    <div class="price-full">
+        <span class="price">{{ item.get_price }}</span>
+    </div>
+
 
     {% if item.is_authenticated %}
     <div class="change-favorites">
@@ -13,6 +17,6 @@
     </div>
     {% endif %}
 
-    <button type="submit" id="{{item.id}}" class="checkout-button btn btn-success">Buy</button>
+    {{ item.buy_html | safe }}
     <button type="submit" class="basket-button btn btn-danger" data-product-id="{{item.id}}" data-type-change="1">Add to basket</button>
 </div>

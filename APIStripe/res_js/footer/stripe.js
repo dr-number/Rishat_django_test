@@ -4,15 +4,26 @@ class APIStripe{
     
     constructor(){
         this.#stripe = Stripe("pk_test_51LgR6IHVRJovbZDJEifEzGWqm5oSz8d6XlLpLMHYrdRPi5NeZb251Vqe7SzwouLYhtlvBYZIebzm6hnDPfK5jPNT00NNFTs3Zl");
-        this.#initCheckOut();
+        this.initCheckOut();
         this.#initBasketByAll();
     }
 
-    #initCheckOut(){
+    initCheckOut(){
+        let selectCurently, data;
+
         document.querySelectorAll(".checkout-button").forEach(button => {
             button.onclick = () => {
-                fetch("/buy/" + button.getAttribute("id") + "/", {
-                    method: "GET"
+
+                selectCurently = button.parentNode.querySelector("#select-curently");
+
+                if(selectCurently)
+                    data = "currently="+selectCurently.value 
+                else
+                    data = "currently=usd" 
+                
+
+                fetch("/buy/" + button.getAttribute("id") + "/?" + data, {
+                    method: "GET",
                 })
                 .then(function(response){
                     return response.json();
@@ -40,17 +51,18 @@ class APIStripe{
 
                 const array = [];
                 const ids = [];
-                let name, price, count, item;
+                let name, price, count, item, currently;
 
                 document.querySelectorAll(".product").forEach(product => {
 
                     name = product.querySelector(".name").innerHTML;
+                    currently = product.querySelector(".currently").innerHTML;
                     price = Math.round(product.querySelector(".price").innerHTML * 100);
                     count = product.querySelector(".count-in-basket").value;
 
                     item = {
                         'price_data': {
-                            'currency': 'usd',
+                            'currency': currently,
                             'product_data': {
                             'name': name,
                             },
@@ -89,6 +101,7 @@ class APIStripe{
             }
         })
     }
+
 }
 
 const ApiStripe = new APIStripe();

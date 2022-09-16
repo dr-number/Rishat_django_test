@@ -13,7 +13,10 @@ def prepare_params(params):
 
 
 
-def render_button_ajax_modal(request, modal_id, text, classes = '', params = '', buttom_id = '', custom_title = '', rerender_always = ''):
+def render_button_ajax_modal(request, modal_id, 
+    text, classes = '', params = '', 
+    buttom_id = '', custom_title = '', 
+    rerender_always = '', run_after_init = ''):
 
     return render_to_string('main/includes/button_ajax_modal.html', {
         'modal_id' : modal_id,
@@ -23,7 +26,8 @@ def render_button_ajax_modal(request, modal_id, text, classes = '', params = '',
         'params' : prepare_params(params),
         'buttom_id' : buttom_id,
         'custom_title' : custom_title,
-        'rerender_always' : rerender_always
+        'rerender_always' : rerender_always,
+        'run_after_init' : run_after_init
     })
 
 def render_button_ajax_modal_svg(request, modal_id, 

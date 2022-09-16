@@ -2,7 +2,10 @@
 <div class="product" product-id="{{item.id}}">
     <div class="name">{{ item.name }}</div>
     <div class="description">{{ item.description }}</div>
-    <div class="price">{{ item.get_price }}</div>
+    
+    <div class="price-full">
+        <span class="price">{{ item.get_price }}</span>
+    </div>
 
     {%  include 'main/includes/button_ajax_modal_svg.html' with button=item.data_delete %}
 

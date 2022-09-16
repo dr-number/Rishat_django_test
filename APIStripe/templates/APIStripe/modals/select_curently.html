@@ -1,0 +1,25 @@
+{% extends 'main/includes/base_modal.html' %}
+
+{% block title %}{% endblock title %}
+
+{% block content %}
+    <p class="text-center"><b>{{ question }}</b></p>
+
+    <div class="modal-favorite" data-product-id="{{ id }}">
+        <b>Product: </b>{{name}}<br>
+        <b>Price: </b>{{price}}
+    </div>
+
+    <b>Select curently</b>
+
+    {% if currencies %}
+    <select id="select-curently">
+        {% for item in currencies %}
+        <option value="{{ item }}">{{ item }}</option>
+        {% endfor %}
+    </select>
+    {% endif %}
+
+    <button type="submit" id="{{ id }}" class="checkout-button btn btn-success">Buy</button>
+    
+{% endblock content %} 

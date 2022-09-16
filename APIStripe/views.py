@@ -12,6 +12,7 @@ from APIStripe.models import Item
 from favorites.models import FavoritesItem
 
 from django.core.paginator import Paginator
+from main.callback import render_button_ajax_modal
 from main.constants import COUNT_PRODUCTS_ON_PAGE
 
 from main.functions import getCurrentHost
@@ -57,10 +58,12 @@ class CreateCheckoutSessionView(View):
         item = Item.objects.get(pk = id)
 
         try:
+            data_get = request.GET
+
             session = stripe.checkout.Session.create(
                 line_items=[{
                     'price_data': {
-                        'currency': 'usd',
+                        'currency': data_get["currently"],
                         'product_data': {
                         'name': item.name,
                         },
@@ -116,7 +119,10 @@ class Products(TemplateView):
 
         if is_authenticated:
             favorites = FavoritesItem.getIds(user_id=request.user.id)
-        
+
+        countrySpec = CountrySpec()
+        currencies = countrySpec.getData()
+
         for item in products:
 
             item.is_authenticated = is_authenticated
@@ -128,10 +134,55 @@ class Products(TemplateView):
                 item.status_favorites = 'on'
                 item.status_favorites_style = 'off'
 
+            
+            select_curently_params = {
+                "id" : str(item.id),
+                "name" : item.name,
+                "price" : str(item.price),
+                "currencies" : currencies
+            }
+
+            buy_html = render_button_ajax_modal(
+                request=request,
+                modal_id="select_curently",
+                text="buy",
+                classes="btn btn-success",
+                rerender_always="1",
+                params=select_curently_params,
+                run_after_init="ApiStripe.initCheckOut()"
+            )
+
+            item.buy_html = buy_html
+
         paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
         page_obj = paginator.get_page(request.GET.get('page'))
+
 
         return render(request, self.template_name, {
             'page_obj' : page_obj,
             'count' : len(products)
             })
+
+
+class CountrySpec():
+    CACHE_NAME = 'payment_currencies'
+    TTL = 1000 * 60 * 60 * 24 * 30
+
+
+    def getData(self):
+
+        payment_currencies = cache.get(self.CACHE_NAME)
+        
+        if payment_currencies:
+            return payment_currencies
+
+        data = stripe.CountrySpec.retrieve("US")
+        payment_currencies = data["supported_payment_currencies"]
+
+        if not payment_currencies:
+            return None
+
+        cache.set(self.CACHE_NAME, json.dumps(payment_currencies), self.TTL)
+        return payment_currencies
+
+
