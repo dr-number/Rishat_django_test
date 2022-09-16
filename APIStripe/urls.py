@@ -8,7 +8,10 @@ from APIStripe.views import (
     Success,
     Cancel
 )
-from main import modals
+from main.modals import (
+    RenderModalAJAX,
+    AutoUploadModals
+)
 
 
 urlpatterns = [
@@ -18,6 +21,6 @@ urlpatterns = [
     path('item/<int:id>/', ProductItem.as_view(), name='buy'),
     path('buy/<int:id>/', CreateCheckoutSessionView.as_view(), name='item'),
 
-    path('render_modal_ajax/', modals.render_modal_ajax, name='render_modal_ajax'),
-    path('auto_upload_modals/', modals.auto_upload_modals, name='auto_upload_modals')
+    path('render_modal_ajax/', RenderModalAJAX.as_view(), name='render_modal_ajax'),
+    path('auto_upload_modals/', AutoUploadModals.as_view(), name='auto_upload_modals')
 ]

@@ -69,7 +69,6 @@ class Change(View):
         type_change = data_post["typeChange"]
 
         user_id = request.user.id
-
         ids = FavoritesItem.getIds(user_id=user_id)
         
         if type_change == self.__ADD_TO_FAFORITE:

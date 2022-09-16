@@ -5,6 +5,8 @@ from custom_user.forms import RegistrationForm, AuthorizationForm
 from custom_user.models import UserCustom
 from django.views.generic import TemplateView
 
+from django.views import View
+
 class Registration(TemplateView):
     template_name = 'custom_user/registration.html'
 
@@ -57,7 +59,8 @@ class Authorization(TemplateView):
        
         return render(request, self.template_name, {'form': AuthorizationForm(request.POST)})
 
-def signout(request):
-    logout(request)
-    return redirect(reverse('products'))
+class Signout(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect(reverse('products'))
 

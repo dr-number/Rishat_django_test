@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 import json
 
+from django.views import View
 from main.functions import get_app_name
 from django.template.loader import render_to_string
 
@@ -66,34 +67,34 @@ def prepare_arguments_function(params):
     return result
 
 
-def call_back(request):
+class CallBack(View):
 
-    response = {
-        'additional_data' : '',
-        'result' : '',
-        'error' : '',
-        'code' : 200, 
-    }
+    def __RESPONSE():
+        return {
+            'additional_data' : '',
+            'result' : '',
+            'error' : '',
+            'code' : 200, 
+        }
 
-    if request.method != "POST":
-        response['error'] = 'Method not POST!'
+    def post(self, request, *args, **kwargs):
+
+        response = self.__RESPONSE()
+
+        try:
+            data_post = json.load(request)
+            method = data_post['method']
+
+            if 'params' in data_post:
+                params = prepare_arguments_function(data_post['params'])
+            else:
+                params = ''
+
+            result = eval('execute_from_ajax.' + method  + '(' + params + ')')
+            response['result'] = result
+        except AttributeError:
+            response['error'] = 'Method \'' + method + '\' does not exist or it was called incorrectly!'
+
         return JsonResponse(response)
-
-    try:
-        data_post = json.load(request)
-    
-        method = data_post['method']
-
-        if 'params' in data_post:
-            params = prepare_arguments_function(data_post['params'])
-        else:
-            params = ''
-
-        result = eval('execute_from_ajax.' + method  + '(' + params + ')')
-        response['result'] = result
-    except AttributeError:
-        response['error'] = 'Method \'' + method + '\' does not exist or it was called incorrectly!'
-
-    return JsonResponse(response)
 
 

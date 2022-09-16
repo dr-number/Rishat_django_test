@@ -5,12 +5,12 @@ from django.urls import path
 from custom_user.views import (
     Registration,
     Authorization,
-    signout
+    Signout
     )
 
 
 urlpatterns = [
     path('registration/', Registration.as_view(), name='registration'),
     path('authorization/', Authorization.as_view(), name='authorization'),
-    path('signout/', signout, name='signout'),
+    path('signout/', Signout.as_view(), name='signout'),
 ]
