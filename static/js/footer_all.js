@@ -296,6 +296,54 @@ class Favorites{
 }
 
 const favorites = new Favorites();
+class AjaxServer{
+
+    #getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    getParams(element){
+        return JSON.parse(JSON.stringify(element.dataset));
+    }
+
+    runInServerFetch(url, params=''){
+
+        const head = {
+            method: "POST",
+            credentials: 'same-origin',
+            headers: {
+                'Accept' : 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRFToken' : this.#getCookie('csrftoken') //CSRF_TOKEN
+            }
+        };
+
+        if(params != '')
+            head['body'] = JSON.stringify(params);
+
+        return fetch(url, head);
+    }
+
+}
+const ajaxServer = new AjaxServer();
+
+document.addEventListener('click', function(e) {
+    if (e.target.id != profile.getProfilePopupBtnId()) {
+      profile.hidePopup();
+    }
+  });
 class Modals{
 
     #ajaxServer = undefined;
@@ -306,14 +354,14 @@ class Modals{
         this.#renderAutoUploadModals();
     }
 
-    #getModal(modalId){
+    getModal(modalId){
         const sectionModals = document.getElementById('ajax-modals');
         return sectionModals.querySelector("#" + modalId);
     }
 
     openLoadIndicator(){
 
-        const modal = this.#getModal("indicator-loader");
+        const modal = this.getModal("indicator-loader");
 
         if(modal && (!modal.getAttribute("style") || modal.style.display == 'none'))
             modal.style.display = "block";
@@ -321,7 +369,7 @@ class Modals{
 
     closeLoadIndicator(){
 
-        const modal = this.#getModal("indicator-loader");
+        const modal = this.getModal("indicator-loader");
 
         if(modal)
             modal.style.display = "none";
@@ -352,7 +400,7 @@ class Modals{
 
     #openModalError(){
         this.closeLoadIndicator();
-        this.#openModal(this.#getModal("error-modal"));
+        this.#openModal(this.getModal("error-modal"));
     }
 
 
@@ -365,7 +413,7 @@ class Modals{
                 if(sectionModals){
 
                     const modalId = button.dataset.modal_id;
-                    const modal = this.#getModal(modalId);
+                    const modal = this.getModal(modalId);
                     const isRerender = this.#isRerenderModal(button);
 
                     if(modal && !isRerender){
@@ -395,7 +443,7 @@ class Modals{
 
                             sectionModals.insertAdjacentHTML("beforeend", result.html);
                             this.closeLoadIndicator();
-                            this.#openModal(this.#getModal(modalId));
+                            this.#openModal(this.getModal(modalId));
 
 
                             if(button.hasAttribute("data-run-after-init"))
@@ -457,47 +505,7 @@ class Modals{
     }
 }
 
-class AjaxServer{
-
-    #getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    getParams(element){
-        return JSON.parse(JSON.stringify(element.dataset));
-    }
-
-    runInServerFetch(url, params=''){
-
-        const head = {
-            method: "POST",
-            credentials: 'same-origin',
-            headers: {
-                'Accept' : 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRFToken' : this.#getCookie('csrftoken') //CSRF_TOKEN
-            }
-        };
-
-        if(params != '')
-            head['body'] = JSON.stringify(params);
-
-        return fetch(url, head);
-    }
-
-}
+const modals = new Modals(ajaxServer);
 class Question{
 
     init(){
@@ -508,31 +516,15 @@ class Question{
             listElements.forEach(button => {
                 button.onclick = () => {
 
-                    if(button.hasAttribute("function")){
+                    if(button.hasAttribute("function"))
                         eval(button.getAttribute("function"));
 
-                    const modal = button.closest(".modal")
-
-                    if(modal)
-                        modal.style.display = "none";
-                    }
-
+                    modals.closeModal(modals.getModal("delete_favorites"));
                 }
             });
         }
 
     }
 }
-const ajaxServer = new AjaxServer();
-
-const modals = new Modals(ajaxServer);
 
 const question = new Question();
-
-
-
-document.addEventListener('click', function(e) {
-    if (e.target.id != profile.getProfilePopupBtnId()) {
-      profile.hidePopup();
-    }
-  });

@@ -33,7 +33,7 @@ class Favorites(TemplateView):
                     'item' : item,
                     'delete' : render_button_ajax_modal_svg(
                         request=request, 
-                        modal_id="delete",
+                        modal_id="delete_favorites",
                         svg="#main--res_svg--delete",
                         svg_classes="ico",
                         classes="favorite-delete btn",

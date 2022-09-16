@@ -20,7 +20,7 @@
             "name": "Rishat_django_test [Gulp task]",
             "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
             "args": [
-              "modals" //dedug task
+              "dev-concat-footer-js" //dedug task
             ]
           }
     ]

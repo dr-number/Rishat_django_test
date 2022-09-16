@@ -29,6 +29,7 @@ const DIR_MAIN_APP = 'main'
 const DIR_PREFIX_SATIC_APP = 'res_'
 
 const JS_INIT_FOOTER = `./${DIR_MAIN_APP}/${DIR_PREFIX_SATIC_APP}js/footer/init.js`
+const JS_AFTER_INIT_FOOTER = `./${DIR_MAIN_APP}/${DIR_PREFIX_SATIC_APP}js/footer/after_init/*.js`
 const JS_INIT_HEADER = `./${DIR_MAIN_APP}/${DIR_PREFIX_SATIC_APP}js/header/init.js`
 
 const template = {
@@ -46,7 +47,11 @@ const template = {
             `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}scss/*.scss`
         ],
         app_js: {
-            header: [`./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}js/header/*.js`, `!` + JS_INIT_HEADER],
+            header: [
+                `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}js/header/*.js`, 
+                `!` + JS_INIT_HEADER,
+                `!` + JS_AFTER_INIT_FOOTER
+            ],
             footer: [`./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}js/footer/*.js`, `!` + JS_INIT_FOOTER]
 
         },
@@ -90,6 +95,7 @@ gulp.task('dev-concat-footer-js', function() {
 
     const params = template.src.app_js.footer;
     params.push(JS_INIT_FOOTER);
+    params.push(JS_AFTER_INIT_FOOTER);
 
     return gulp.src(params)
         .pipe(concat('footer_all.js')) 

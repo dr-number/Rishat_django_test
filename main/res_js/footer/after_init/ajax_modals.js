@@ -8,14 +8,14 @@ class Modals{
         this.#renderAutoUploadModals();
     }
 
-    #getModal(modalId){
+    getModal(modalId){
         const sectionModals = document.getElementById('ajax-modals');
         return sectionModals.querySelector("#" + modalId);
     }
 
     openLoadIndicator(){
 
-        const modal = this.#getModal("indicator-loader");
+        const modal = this.getModal("indicator-loader");
 
         if(modal && (!modal.getAttribute("style") || modal.style.display == 'none'))
             modal.style.display = "block";
@@ -23,7 +23,7 @@ class Modals{
 
     closeLoadIndicator(){
 
-        const modal = this.#getModal("indicator-loader");
+        const modal = this.getModal("indicator-loader");
 
         if(modal)
             modal.style.display = "none";
@@ -54,7 +54,7 @@ class Modals{
 
     #openModalError(){
         this.closeLoadIndicator();
-        this.#openModal(this.#getModal("error-modal"));
+        this.#openModal(this.getModal("error-modal"));
     }
 
 
@@ -67,7 +67,7 @@ class Modals{
                 if(sectionModals){
 
                     const modalId = button.dataset.modal_id;
-                    const modal = this.#getModal(modalId);
+                    const modal = this.getModal(modalId);
                     const isRerender = this.#isRerenderModal(button);
 
                     if(modal && !isRerender){
@@ -97,7 +97,7 @@ class Modals{
 
                             sectionModals.insertAdjacentHTML("beforeend", result.html);
                             this.closeLoadIndicator();
-                            this.#openModal(this.#getModal(modalId));
+                            this.#openModal(this.getModal(modalId));
 
 
                             if(button.hasAttribute("data-run-after-init"))
@@ -105,7 +105,7 @@ class Modals{
                         }
                         else{
                             this.#openModalError();
-                            console.error(result.error);
+                            console.error(result.error);///
                         }
                         
                     })
@@ -158,3 +158,5 @@ class Modals{
         });
     }
 }
+
+const modals = new Modals(ajaxServer);
