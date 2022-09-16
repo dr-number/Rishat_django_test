@@ -26,6 +26,12 @@ After this you may:
 2) Go to page **http://localhost:8000/basket/** (where you can change the count of products)
 3) Click on the button **Buy all**
 
+## After authorization 
+You have access to the page with selected products http://localhost:8000/favorites/
+
+
+
+If there are more than 10 products on the page, pagination is activated
 
 ## Deploy 
 - **http://d4dd-5-128-71-145.ngrok.io**
