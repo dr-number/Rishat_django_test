@@ -105,7 +105,7 @@ class ProductItem(TemplateView):
 
 class Products(TemplateView):
     template_name = "APIStripe/products.html"
-    COUNT_PRODUCTS_ON_PAGE = 1
+    COUNT_PRODUCTS_ON_PAGE = 10
 
     def get(self, request, *args, **kwargs):
 

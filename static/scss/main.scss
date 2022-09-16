@@ -9098,6 +9098,7 @@ a.ico-link:hover{
     width: 24px;
     height: 24px;
     cursor: pointer;
+    vertical-align: middle;
 }
 .modal {
     display: none;
@@ -9127,4 +9128,36 @@ a.ico-link:hover{
         }
 
     }
+}
+.paginations{
+
+    text-align: center;
+
+    .page-num {
+        list-style: none;
+        text-align: center;
+        display: inline-block;
+
+        span{
+            display: block;
+            border-radius: 5px;
+            color: #fff;
+            border: gray 1px solid;
+            padding: 10px;
+            background-color: green;
+        }
+
+        a{
+            display: block;
+            border-radius: 5px;
+            color: gray;
+            border: gray 1px solid;
+            padding: 10px;
+
+            &:hover{
+                text-decoration:none;
+            }
+        }
+    }
+    
 }

@@ -7316,7 +7316,8 @@ a.ico-link:hover {
 .ico {
   width: 24px;
   height: 24px;
-  cursor: pointer; }
+  cursor: pointer;
+  vertical-align: middle; }
 
 .modal {
   display: none;
@@ -7341,5 +7342,27 @@ a.ico-link:hover {
       font-size: 28px;
       font-weight: bold;
       cursor: pointer; }
+
+.paginations {
+  text-align: center; }
+  .paginations .page-num {
+    list-style: none;
+    text-align: center;
+    display: inline-block; }
+    .paginations .page-num span {
+      display: block;
+      border-radius: 5px;
+      color: #fff;
+      border: gray 1px solid;
+      padding: 10px;
+      background-color: green; }
+    .paginations .page-num a {
+      display: block;
+      border-radius: 5px;
+      color: gray;
+      border: gray 1px solid;
+      padding: 10px; }
+      .paginations .page-num a:hover {
+        text-decoration: none; }
 
 /*# sourceMappingURL=main.css.map */
