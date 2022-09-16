@@ -56,13 +56,13 @@ class APIStripe{
                 document.querySelectorAll(".product").forEach(product => {
 
                     name = product.querySelector(".name").innerHTML;
-                    currently = product.querySelector(".currently").innerHTML;
+                    //currently = product.querySelector(".currently").innerHTML;
                     price = Math.round(product.querySelector(".price").innerHTML * 100);
                     count = product.querySelector(".count-in-basket").value;
 
                     item = {
                         'price_data': {
-                            'currency': currently,
+                            'currency': "usd",
                             'product_data': {
                             'name': name,
                             },
