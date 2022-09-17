@@ -6,11 +6,20 @@
 
 <div class="container">
     {% if products %}
-        {{ products | safe}}
-        Count type products: <b>{{count_type}}</b>
-        <button type="submit" class="basket-buy-all btn btn-success">Buy all</button>
+
+        <script id="data-currencies">{{ currencies | safe }}</script>
+
+        <div class="products">
+        {% for product in products %}
+            {%  include 'basket/item.html' with item=product %}
+        {% endfor %}
+        </div>
+
+        <div>Count products: <b>{{ count_type }}</b></div>
+        {{ buy_html | safe }}
+        
     {% else %}
-        <p class="no-products">No products in basket!</p>
+        <p class="no-products">Not products!</p>
     {% endif %}
 </div>
 

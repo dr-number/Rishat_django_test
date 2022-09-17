@@ -12,21 +12,16 @@ class Basket{
             })
             .then(function(result){
 
-                if(result.status == 'success')
-                    if(countElem && result.count > 0)
+                if(result.status == 'success'){
+                    if(countElem && parseInt(result.count > 0))
                         countElem.value = result.count
+                }
                 else{
                     console.error("Basket error: ", result.error);    
                 }
             })
-            .then(function(result){
-
-                if(result.error){
-                    alert(result.error.message);
-                }
-            })
-            .catch(function(error){
-                console.error("Error: ", error);
+            .catch(function(e){
+                console.error("Error: ", e);
             });
 
     }

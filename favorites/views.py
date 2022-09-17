@@ -63,6 +63,7 @@ class Favorites(TemplateView):
         page_obj = paginator.get_page(request.GET.get('page'))
 
         return render(request, self.template_name, {
+            'title' : 'Favorites',
             'page_obj' : page_obj,
             'count_type' : count_products
             })

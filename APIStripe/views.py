@@ -12,14 +12,24 @@ from APIStripe.models import Item
 from favorites.models import FavoritesItem
 
 from django.core.paginator import Paginator
-from main.callback import prepare_params, render_button_ajax_modal
+from main.callback import render_button_ajax_modal
 from main.constants import COUNT_PRODUCTS_ON_PAGE
-
-from main.functions import getCurrentHost
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class RenderBuyButton:
+
+    def render_from_basket(self, request):
+
+        return render_button_ajax_modal(
+            request=request,
+            modal_id="select_curently",
+            text="buy",
+            classes="btn btn-success",
+            rerender_always="1",
+            run_after_init="initSelectCurentlyBasket()"
+        )
+
     def render(self, request, item):
 
         select_curently_params = {
@@ -155,11 +165,11 @@ class Products(TemplateView):
         countrySpec = CountrySpec()
         currencies = countrySpec.get_data()
 
-
         paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
         page_obj = paginator.get_page(request.GET.get('page'))
 
         return render(request, self.template_name, {
+            'title' : 'Products',
             'page_obj' : page_obj,
             'count' : len(products),
             'currencies' : currencies

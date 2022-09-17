@@ -4,10 +4,11 @@
     
     <div class="price-full">
         <span class="price">{{ item.get_price }}</span>
-        <span class="currently">{{ item.currency_payment.currency }}</span>
     </div>
 
-    <button type="submit" class="basket-remove btn btn-danger" data-product-id="{{item.id}}" data-type-change="0">-</button>
-    <input class="count-in-basket" type="text" value="{{count}}" readonly />
-    <button type="submit" class="basket-add btn btn-danger" data-product-id="{{item.id}}" data-type-change="1">+</button>
+    <div class="count">
+        <button type="submit" class="basket-remove btn btn-danger" data-product-id="{{item.id}}" data-type-change="0">-</button>
+        <input class="count-in-basket" type="text" value="{{item.count}}" readonly />
+        <button type="submit" class="basket-add btn btn-danger" data-product-id="{{item.id}}" data-type-change="1">+</button>
+    </div>
 </div>

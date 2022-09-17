@@ -9027,6 +9027,13 @@ a.text-dark:hover, a.text-dark:focus {
         font-weight: bold;
     }
 }
+
+#box-products{
+    
+    .count{
+        display: none;
+    }
+}
 .product{
     .count-in-basket{
         width: 50px;
@@ -9045,6 +9052,9 @@ a.text-dark:hover, a.text-dark:focus {
     border-radius: 5px;
     border: 1px solid black;
     background-color: #fff;
+    padding: 5px;
+}
+#select-curently{
     padding: 5px;
 }
 .ico-favorites-on use{
