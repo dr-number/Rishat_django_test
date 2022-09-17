@@ -27,7 +27,6 @@ class RenderDeleteButton():
         }
 
         from_modals_params = {
-            "question": "Do you want to remove an item from your favorites?",
             "f_yes": "favorites.deleteFromFavorite()",
             "id": str(item.id),
             "name": item.name,
