@@ -24,41 +24,42 @@ class Favorites(TemplateView):
         count_products = 0
         ids = FavoritesItem.getIds(user_id=request.user.id)
 
-        if ids:
-            products = Item.objects.filter(id__in=ids)
+        if not ids:
+            return render(request, self.template_name, {
+                'title' : 'Favorites'
+            })
 
-            delete_button = {
-                "modal_id": "delete_favorites",
-                "svg": "#main--res_svg--delete",
-                "svg_classes": "ico",
-                "classes": "favorite-delete btn",
-                "rerender_always": "1",
-                "run_after_init": "question.init()",
-                "app_name": "favorites",
-                "params": ""
-            }
+        products = Item.objects.filter(id__in=ids)
 
-            delete_from_modals_params = {
-                "question": "Do you want to remove an item from your favorites?",
-                "f_yes": "favorites.deleteFromFavorite()",
-                "id": "",
-                "name": "",
-                "price": ""
-            }
+        delete_button = {
+            "modal_id": "delete_favorites",
+            "svg": "#main--res_svg--delete",
+            "svg_classes": "ico",
+            "classes": "favorite-delete btn",
+            "rerender_always": "1",
+            "run_after_init": "question.init()",
+            "app_name": "favorites",
+            "params": ""
+        }
 
-            for item in products:
+        delete_from_modals_params = {
+            "question": "Do you want to remove an item from your favorites?",
+            "f_yes": "favorites.deleteFromFavorite()",
+            "id": "",
+            "name": "",
+            "price": ""
+        }
 
-                delete_from_modals_params["id"] = str(item.id)
-                delete_from_modals_params["name"] = item.name
-                delete_from_modals_params["price"] = str(item.price)
+        for item in products:
 
-                delete_button["params"] = prepare_params(delete_from_modals_params)
-                item.data_delete = delete_button
+            delete_from_modals_params["id"] = str(item.id)
+            delete_from_modals_params["name"] = item.name
+            delete_from_modals_params["price"] = str(item.price)
+
+            delete_button["params"] = prepare_params(delete_from_modals_params)
+            item.data_delete = delete_button
                     
-            if products:
-                count_products = len(products)
-
-        
+        count_products = len(products)
         paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
         page_obj = paginator.get_page(request.GET.get('page'))
 
