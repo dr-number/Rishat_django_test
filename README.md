@@ -38,6 +38,5 @@ If there are more than 10 products on the page, pagination is activated
 - **https://d4dd-5-128-71-145.ngrok.io**
 
 ## Video demonstration on YouTube
-**[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://youtu.be/z7UWDztJwnw
-E)
+**[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://youtu.be/z7UWDztJwnw)
 **
