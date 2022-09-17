@@ -13,7 +13,7 @@ class Basket{
             .then(function(result){
 
                 if(result.status == 'success'){
-                    if(countElem && parseInt(result.count > 0))
+                    if(countElem && parseInt(result.count) > 0)
                         countElem.value = result.count
                 }
                 else{
