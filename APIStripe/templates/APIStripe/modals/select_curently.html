@@ -12,14 +12,8 @@
 
     <b>Select curently</b>
 
-    {% if currencies %}
-    <select id="select-curently">
-        {% for item in currencies %}
-        <option value="{{ item }}">{{ item }}</option>
-        {% endfor %}
-    </select>
-    {% endif %}
-
+    <select id="select-curently"></select>
+    
     <button type="submit" id="{{ id }}" class="checkout-button btn btn-success">Buy</button>
     
 {% endblock content %} 

@@ -56,13 +56,13 @@ class APIStripe{
                 document.querySelectorAll(".product").forEach(product => {
 
                     name = product.querySelector(".name").innerHTML;
-                    currently = product.querySelector(".currently").innerHTML;
+                    //currently = product.querySelector(".currently").innerHTML;
                     price = Math.round(product.querySelector(".price").innerHTML * 100);
                     count = product.querySelector(".count-in-basket").value;
 
                     item = {
                         'price_data': {
-                            'currency': currently,
+                            'currency': "usd",
                             'product_data': {
                             'name': name,
                             },
@@ -295,6 +295,28 @@ document.addEventListener('click', function(e) {
       profile.hidePopup();
     }
   });
+
+function initSelectCurently(){
+
+  let opt;
+  let currencies = document.getElementById("data-currencies");
+  const select = document.getElementById("select-curently");
+
+  if(currencies && select){
+    
+    currencies = JSON.parse(currencies.innerHTML);
+    currencies = currencies["currencies"];
+
+    currencies.forEach(item => {
+      opt = document.createElement('option');
+      opt.value = item;
+      opt.innerHTML = item;
+      select.appendChild(opt);
+    })
+
+    ApiStripe.initCheckOut();
+  }
+}
 class Modals{
 
     constructor(){
@@ -395,7 +417,7 @@ class Modals{
 
 
                             if(button.hasAttribute("data-run-after-init"))
-                                eval(button.getAttribute("data-run-after-init"))
+                                eval(button.getAttribute("data-run-after-init"));
                         }
                         else{
                             this.#openModalError();
@@ -403,9 +425,9 @@ class Modals{
                         }
                         
                     })
-                    .catch((error) => {
+                    .catch((e) => {
                         this.#openModalError();
-                        console.error('Failed render!');
+                        console.error('Failed render: ', e);
                     });
                 
                 }
@@ -447,8 +469,8 @@ class Modals{
                 console.error("Failed response!");
 
         })
-        .catch(function(error) {
-            console.log('Failed auto upload render!');
+        .catch(function(e) {
+            console.log('Failed auto upload render: ', e);
         });
     }
 }

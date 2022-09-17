@@ -6,6 +6,9 @@
 
 <div class="container">
     {% if page_obj %}
+
+        <script id="data-currencies">{{ currencies | safe }}</script>
+
         {% for product in page_obj %}
             {%  include 'APIStripe/item.html' with item=product %}
         {% endfor %}

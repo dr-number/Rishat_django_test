@@ -98,7 +98,7 @@ class Modals{
 
 
                             if(button.hasAttribute("data-run-after-init"))
-                                eval(button.getAttribute("data-run-after-init"))
+                                eval(button.getAttribute("data-run-after-init"));
                         }
                         else{
                             this.#openModalError();
@@ -106,9 +106,9 @@ class Modals{
                         }
                         
                     })
-                    .catch((error) => {
+                    .catch((e) => {
                         this.#openModalError();
-                        console.error('Failed render!');
+                        console.error('Failed render: ', e);
                     });
                 
                 }
@@ -150,8 +150,8 @@ class Modals{
                 console.error("Failed response!");
 
         })
-        .catch(function(error) {
-            console.log('Failed auto upload render!');
+        .catch(function(e) {
+            console.log('Failed auto upload render: ', e);
         });
     }
 }
