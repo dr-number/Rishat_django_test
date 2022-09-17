@@ -13,6 +13,31 @@ from main.callback import prepare_params
 from main.constants import COUNT_PRODUCTS_ON_PAGE
 
 
+class RenderDeleteButton():
+    def render(self, item):
+        button = {
+            "modal_id": "delete_favorites",
+            "svg": "#main--res_svg--delete",
+            "svg_classes": "ico",
+            "classes": "favorite-delete btn",
+            "rerender_always": "1",
+            "run_after_init": "question.init()",
+            "app_name": "favorites",
+            "params": ""
+        }
+
+        from_modals_params = {
+            "question": "Do you want to remove an item from your favorites?",
+            "f_yes": "favorites.deleteFromFavorite()",
+            "id": str(item.id),
+            "name": item.name,
+            "price": str(item.price)
+        }
+
+        button["params"] = prepare_params(from_modals_params)
+        return button
+
+
 class Favorites(TemplateView):
     template_name = "favorites/products.html"
 
@@ -31,33 +56,10 @@ class Favorites(TemplateView):
 
         products = Item.objects.filter(id__in=ids)
 
-        delete_button = {
-            "modal_id": "delete_favorites",
-            "svg": "#main--res_svg--delete",
-            "svg_classes": "ico",
-            "classes": "favorite-delete btn",
-            "rerender_always": "1",
-            "run_after_init": "question.init()",
-            "app_name": "favorites",
-            "params": ""
-        }
-
-        delete_from_modals_params = {
-            "question": "Do you want to remove an item from your favorites?",
-            "f_yes": "favorites.deleteFromFavorite()",
-            "id": "",
-            "name": "",
-            "price": ""
-        }
+        renderDeleteButton = RenderDeleteButton()
 
         for item in products:
-
-            delete_from_modals_params["id"] = str(item.id)
-            delete_from_modals_params["name"] = item.name
-            delete_from_modals_params["price"] = str(item.price)
-
-            delete_button["params"] = prepare_params(delete_from_modals_params)
-            item.data_delete = delete_button
+            item.data_delete = renderDeleteButton.render(item)
                     
         count_products = len(products)
         paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
