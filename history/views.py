@@ -16,12 +16,20 @@ class History(TemplateView):
         if not request.user.is_authenticated:
             return redirect(reverse('products'))
 
+        day = None
         history = HistoryItem.objects.filter(user_id=request.user.id)
 
         for item in history:
             data = json.loads(item.data)
             item.total_cost = data["total_cost"]
             item.products = data["products"]
+            item.time = item.created_at.time()
+
+            date = item.created_at.date()
+
+            if(date != day):
+                item.date = date
+                day = date
 
         paginator = Paginator(history, COUNT_PRODUCTS_ON_PAGE)
         page_obj = paginator.get_page(request.GET.get('page'))

@@ -6,7 +6,13 @@
 
 <div class="container">
     {% if page_obj %}
+
         {% for product in page_obj %}
+
+            {% if product.date %}
+                <div class="shopping-in-day">{{ product.date }}</div>
+            {% endif %}
+
             {%  include 'history/item.html' with item=product %}
         {% endfor %}
 
