@@ -23,5 +23,6 @@ urlpatterns = [
     path('basket/', include('basket.urls')),
     path('user/', include('custom_user.urls')),
     path('favorites/', include('favorites.urls')),
+    path('history/', include('history.urls')),
     
 ]

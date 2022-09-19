@@ -7294,6 +7294,16 @@ a.text-dark:hover, a.text-dark:focus {
   .favorite-delete .ico use {
     fill: #fff; }
 
+.history {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  border: #e5e5e5 1px solid; }
+  .history:hover {
+    border: #000 1px solid; }
+  .history .product {
+    border: none; }
+
 .indicator-load {
   display: none;
   position: fixed;

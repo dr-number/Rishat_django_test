@@ -9074,6 +9074,21 @@ a.text-dark:hover, a.text-dark:focus {
         fill: #fff;
     }
 }
+.history{
+
+    padding: 5px;
+    margin: 5px;
+    border-radius: 5px;
+    border: #e5e5e5 1px solid;
+
+    &:hover{
+        border: #000 1px solid;
+    }
+
+    .product {
+        border: none;
+    }
+}
 .indicator-load {
     display: none;
     position: fixed;

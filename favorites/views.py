@@ -11,6 +11,7 @@ from favorites.models import FavoritesItem
 from django.core.paginator import Paginator
 from main.callback import prepare_params
 from main.constants import COUNT_PRODUCTS_ON_PAGE
+from main.functions import ModelJsonData
 
 
 class RenderDeleteButton():
@@ -45,8 +46,10 @@ class Favorites(TemplateView):
         if not request.user.is_authenticated:
             return redirect(reverse('products'))
 
+        modelJsonData = ModelJsonData()
+
         count_products = 0
-        ids = FavoritesItem.getIds(user_id=request.user.id)
+        ids = modelJsonData.getData(FavoritesItem, 'user_id', request.user.id, 'products_id')
 
         if not ids:
             return render(request, self.template_name, {
@@ -82,14 +85,16 @@ class Change(View):
         type_change = data_post["typeChange"]
 
         user_id = request.user.id
-        ids = FavoritesItem.getIds(user_id=user_id)
+
+        modelJsonData = ModelJsonData()
+        ids = modelJsonData.get_data(FavoritesItem, user_id, 'products_id')
         
         if type_change == self.__ADD_TO_FAFORITE:
             ids.append(product_id)
         else:
             ids.remove(product_id)
 
-        if FavoritesItem.setIds(user_id, ids):
+        if modelJsonData.set_data(FavoritesItem, user_id, 'products_id', ids):
             status = 'success'
         else:
             status = 'failed'

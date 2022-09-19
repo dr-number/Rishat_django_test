@@ -31,6 +31,13 @@
                 <use xlink:href="{% static 'svg/sprite.svg' %}#favorites--res_svg--favorites"></use>
               </svg>
             </a>
+
+            <a class="p-2 ico-link" href="{% url 'history' %}">
+              <svg class="ico">
+                <use xlink:href="{% static 'svg/sprite.svg' %}#history--res_svg--history"></use>
+              </svg>
+            </a>
+
             <a class="p-2 text-dark" id="profile-popup-btn" href="#">{{ user.username }}</a>
             {% include 'custom_user/inclides/popup_profile.html' %}
           {% else %}

@@ -12,8 +12,11 @@ from APIStripe.models import Item
 from favorites.models import FavoritesItem
 
 from django.core.paginator import Paginator
+from history.functions_history import HISTORY_STATUS_CANCEL, HISTORY_STATUS_SUCCESS, prepare_array, prepare_data, set_history, update_status
+from history.views import History
 from main.callback import render_button_ajax_modal
 from main.constants import COUNT_PRODUCTS_ON_PAGE
+from main.functions import ModelJsonData
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -53,12 +56,20 @@ class BasketCreateCheckoutSessionView(View):
 
         try:
             data_post = json.load(request)
+            data = data_post['data']
+            currently = data[0]['price_data']['currency']
+
+            history_id = None
+
+            if(request.user.is_authenticated):
+                history_id = set_history(request.user.id, prepare_array(data), currently)
+
 
             session = stripe.checkout.Session.create(
-                line_items = data_post['data'],
+                line_items = data,
                 mode = 'payment',
-                success_url = request.META['HTTP_ORIGIN'] + '/success/',
-                cancel_url = request.META['HTTP_ORIGIN'] + '/cancel/',
+                success_url = request.META['HTTP_ORIGIN'] + '/success/?id=' + str(history_id),
+                cancel_url = request.META['HTTP_ORIGIN'] + '/cancel/?id=' + str(history_id)
             )
 
             clears = []
@@ -69,7 +80,6 @@ class BasketCreateCheckoutSessionView(View):
                 clears.append('product_' + id)
 
             cache.delete_many(clears)
-
 
             return JsonResponse({
                 'id': session.id
@@ -88,22 +98,31 @@ class CreateCheckoutSessionView(View):
 
         try:
             data_get = request.GET
+            currently = data_get["currently"]
+            quantity = 1
+
+            history_id = None
+
+            if(request.user.is_authenticated):
+                data_history = prepare_data(item.name, item.price, quantity)
+                history_id = set_history(user_id=request.user.id, data=data_history, currently=currently)
 
             session = stripe.checkout.Session.create(
                 line_items=[{
                     'price_data': {
-                        'currency': data_get["currently"],
+                        'currency': currently,
                         'product_data': {
                         'name': item.name,
                         },
                         'unit_amount': round(item.price * 100),
                     },
-                    'quantity': 1,
+                    'quantity': quantity,
                 }],
                 mode = 'payment',
-                success_url = request.META['HTTP_REFERER'] + 'success/',
-                cancel_url = request.META['HTTP_REFERER'] + 'cancel/',
+                success_url = request.META['HTTP_REFERER'] + 'success/?id=' + str(history_id),
+                cancel_url = request.META['HTTP_REFERER'] + 'cancel/?id=' + str(history_id),
             )
+
 
             return JsonResponse({
                 'id': session.id
@@ -118,8 +137,24 @@ class CreateCheckoutSessionView(View):
 class Success(TemplateView):
     template_name = "APIStripe/success.html"
 
+    def get(self, request, *args, **kwargs):
+        if(request.user.is_authenticated):
+            update_status(request.GET["id"], HISTORY_STATUS_SUCCESS)
+
+        return render(request, self.template_name, {
+            'title' : 'Success'
+        })
+
 class Cancel(TemplateView):
     template_name = "APIStripe/cancel.html"
+
+    def get(self, request, *args, **kwargs):
+        if(request.user.is_authenticated):
+            update_status(request.GET["id"], HISTORY_STATUS_CANCEL)
+
+        return render(request, self.template_name, {
+            'title' : 'Cancel'
+        })
 
 
 class ProductItem(TemplateView):
@@ -144,8 +179,10 @@ class Products(TemplateView):
         products = Item.objects.all()
         renderBuyButton = RenderBuyButton()
 
+        modelJsonData = ModelJsonData()
+
         if is_authenticated:
-            favorites = FavoritesItem.getIds(user_id=request.user.id)
+            favorites = modelJsonData.get_data(FavoritesItem, request.user.id, 'products_id')
 
         for item in products:
 
