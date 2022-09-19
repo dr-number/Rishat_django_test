@@ -1,20 +1,23 @@
 {% load static %}
+
 <div class="history" product-id="{{item.id}}">
 
     {% for p in item.products %}
-        <div class="product">
-            <div class="name">{{ p.name }}</div>
+    <div class="product">
+        <div class="name">{{ p.name }}</div>
 
-            <div class="price-full">
-                <span class="price">{{ p.get_price }}</span>
-            </div>
-
-            <div class="count">
-                count: <b>{{ p.count }}</b>
-            </div>
+        <div class="count">
+            count: <b>{{ p.count }}</b>
         </div>
+
+        <div class="price-full">
+            cost: <span class="price">{{ p.cost }}</span>
+        </div>
+    </div>
+    
     {% endfor %}
 
+    <div>Total cost: <b>{{ item.total_cost }}</b></div>
   
     <div class="status {{ item.status }}">{{ item.status }}</div>
     <div class="date">{{ item.created_at }}</div>

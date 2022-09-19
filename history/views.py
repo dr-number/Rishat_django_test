@@ -19,7 +19,9 @@ class History(TemplateView):
         history = HistoryItem.objects.filter(user_id=request.user.id)
 
         for item in history:
-            item.products = json.loads(item.data)
+            data = json.loads(item.data)
+            item.total_cost = data["total_cost"]
+            item.products = data["products"]
 
         paginator = Paginator(history, COUNT_PRODUCTS_ON_PAGE)
         page_obj = paginator.get_page(request.GET.get('page'))

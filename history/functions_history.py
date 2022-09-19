@@ -8,25 +8,37 @@ HISTORY_STATUS_CANCEL = "cancel"
 HISTORY_STATUS_EXPECTATION = "expectation"
 
 def prepare_data(name, cost, count):
-    return json.dumps([{
-        "name": name,
-        "cost": str(cost),
-        "count": str(count)
-    }])
+    return json.dumps(
+        {
+            "total_cost": str(cost),
+            "products": [{
+                "name": name,
+                "cost": str(cost),
+                "count": str(count)
+            }]
+        }
+    )
 
 def prepare_array(data):
 
     result = []
+    total_cost = 0
 
     for item in data:
+        price_data = item["price_data"]
+        price = int(price_data["unit_amount"]) / 100.0
+        total_cost += float(price * int(item["quantity"]))
 
         result.append({
-            "name": item["price_data"]["product_data"]["name"],
-            "cost": item["price_data"]["unit_amount"],
+            "name": price_data["product_data"]["name"],
+            "cost": price,
             "count": item["quantity"]
         })
 
-    return json.dumps(result)
+    return json.dumps({
+            "total_cost": str(total_cost),
+            "products": result
+        })
 
 
 
