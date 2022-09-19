@@ -13,9 +13,6 @@
         border: none;
     }
 
-    .history-data{
-        display: inline-block;
-    }
 }
 
 .shopping-in-day{
@@ -23,4 +20,13 @@
     font-weight: bold;
     background-color: #adc;
     border-radius: 10px;
+}
+
+.total-cost, .history-data {
+    display: flex;
+    justify-content: flex-end;
+
+    & div{
+        padding: 0 5px;
+    }
 }

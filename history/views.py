@@ -16,10 +16,15 @@ class History(TemplateView):
         if not request.user.is_authenticated:
             return redirect(reverse('products'))
 
-        day = None
         history = HistoryItem.objects.filter(user_id=request.user.id)
 
-        for item in history:
+        paginator = Paginator(history, COUNT_PRODUCTS_ON_PAGE)
+        page_obj = paginator.get_page(request.GET.get('page'))
+
+        day = None
+        is_first_page = True
+
+        for item in page_obj:
             data = json.loads(item.data)
             item.total_cost = data["total_cost"]
             item.products = data["products"]
@@ -27,12 +32,11 @@ class History(TemplateView):
 
             date = item.created_at.date()
 
-            if(date != day):
+            if(is_first_page or date != day):
                 item.date = date
                 day = date
 
-        paginator = Paginator(history, COUNT_PRODUCTS_ON_PAGE)
-        page_obj = paginator.get_page(request.GET.get('page'))
+            is_first_page = False
 
         return render(request, self.template_name, {
             'title' : 'History',

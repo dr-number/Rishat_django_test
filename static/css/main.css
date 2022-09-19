@@ -7303,14 +7303,18 @@ a.text-dark:hover, a.text-dark:focus {
     border: #000 1px solid; }
   .history .product {
     border: none; }
-  .history .history-data {
-    display: inline-block; }
 
 .shopping-in-day {
   text-align: center;
   font-weight: bold;
   background-color: #adc;
   border-radius: 10px; }
+
+.total-cost, .history-data {
+  display: flex;
+  justify-content: flex-end; }
+  .total-cost div, .history-data div {
+    padding: 0 5px; }
 
 .indicator-load {
   display: none;
@@ -7342,6 +7346,14 @@ a.ico-link:hover {
   height: 24px;
   cursor: pointer;
   vertical-align: middle; }
+  .ico.cancel use {
+    fill: #ff8800; }
+  .ico.success use {
+    fill: green; }
+  .ico.error use {
+    fill: red; }
+  .ico.expectation use {
+    fill: #00a2ff; }
 
 .modal {
   display: none;

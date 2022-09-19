@@ -17,12 +17,20 @@
     
     {% endfor %}
 
-    <div>Total cost: <b>{{ item.total_cost }}</b></div>
+    <div class="total-cost">
+        <div>Total cost:</div>
+        <div><b>{{ item.total_cost }}</b></div>
+    </div>
 
     <div class="history-data">
-        <div class="status {{ item.status }}">Status: <b>{{ item.status }}</b></div>
         <div class="created-at">Time: <b>{{ item.time }}</b></div>
         <div class="currently">Currency: <b>{{ item.currency }}</b></div>
+        <div class="status {{ item.status }}">
+            Status: <b>{{ item.status }}</b>
+            <svg class="ico {{ item.status }}">
+                <use xlink:href="{% static 'svg/sprite.svg' %}#main--res_svg--{{ item.status }}"></use>
+            </svg>
+        </div>
     </div>
 
 </div>
