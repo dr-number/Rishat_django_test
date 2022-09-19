@@ -26,11 +26,7 @@ SECRET_KEY = 'django-insecure-=-h7c$vnue96u%55-e13$3sc^oe#l_%01l3esab6((s!%+y%2)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '.vercel.app', '.now.sh']
-CSRF_TRUSTED_ORIGINS = [
-        'http://d4dd-5-128-71-145.ngrok.io',
-        'https://d4dd-5-128-71-145.ngrok.io'
-    ]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -166,4 +162,11 @@ LOGIN_REDIRECT_URL = 'products'
 STRIPE_PUBLIC_KEY = "pk_test_51LgR6IHVRJovbZDJEifEzGWqm5oSz8d6XlLpLMHYrdRPi5NeZb251Vqe7SzwouLYhtlvBYZIebzm6hnDPfK5jPNT00NNFTs3Zl"
 STRIPE_SECRET_KEY = "sk_test_51LgR6IHVRJovbZDJrxuLBVgnlrkWu2TN0Bi8hHgJdTVu8sAWeEAblYwfzq35k6XjkFJaTLl3eMmtVp7DRn3alf7G004fdPIpbf"
 STRIPE_WEBHOOK_SECRET = ""
+
+TUNEL_PREFIX = '71cf'
+
+CSRF_TRUSTED_ORIGINS = [
+        'http://' + TUNEL_PREFIX + '-5-128-71-145.ngrok.io',
+        'https://' + TUNEL_PREFIX + '-5-128-71-145.ngrok.io'
+    ]
 
