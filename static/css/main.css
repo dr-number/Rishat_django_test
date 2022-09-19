@@ -7303,6 +7303,8 @@ a.text-dark:hover, a.text-dark:focus {
     border: #000 1px solid; }
   .history .product {
     border: none; }
+  .history .history-data {
+    display: inline-block; }
 
 .shopping-in-day {
   text-align: center;

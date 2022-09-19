@@ -35,7 +35,7 @@ class History(TemplateView):
         page_obj = paginator.get_page(request.GET.get('page'))
 
         return render(request, self.template_name, {
-            'title' : 'Products',
+            'title' : 'History',
             'page_obj' : page_obj,
             'count' : len(history),
         })
