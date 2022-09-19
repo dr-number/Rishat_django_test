@@ -184,7 +184,10 @@ class Products(TemplateView):
         if is_authenticated:
             favorites = modelJsonData.get_data(FavoritesItem, request.user.id, 'products_id')
 
-        for item in products:
+        paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
+        page_obj = paginator.get_page(request.GET.get('page'))
+
+        for item in page_obj:
 
             item.is_authenticated = is_authenticated
 
@@ -199,9 +202,6 @@ class Products(TemplateView):
 
         countrySpec = CountrySpec()
         currencies = countrySpec.get_data()
-
-        paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
-        page_obj = paginator.get_page(request.GET.get('page'))
 
         return render(request, self.template_name, {
             'title' : 'Products',

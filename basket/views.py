@@ -2,14 +2,12 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from django.views import View
 from django.views.generic import TemplateView
-from django.template.loader import render_to_string
 from django.shortcuts import render
 from django.core.paginator import Paginator
 import json
 
 from APIStripe.models import Item
 from APIStripe.views import CountrySpec, RenderBuyButton
-from main.constants import COUNT_PRODUCTS_ON_PAGE
 
 class Change(View):
     __ADD_TO_BASKET = "1"

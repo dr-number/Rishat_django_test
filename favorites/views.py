@@ -57,15 +57,15 @@ class Favorites(TemplateView):
             })
 
         products = Item.objects.filter(id__in=ids)
-
-        renderDeleteButton = RenderDeleteButton()
-
-        for item in products:
-            item.data_delete = renderDeleteButton.render(item)
-                    
+       
         count_products = len(products)
         paginator = Paginator(products, COUNT_PRODUCTS_ON_PAGE)
         page_obj = paginator.get_page(request.GET.get('page'))
+
+        renderDeleteButton = RenderDeleteButton()
+        
+        for item in page_obj:
+            item.data_delete = renderDeleteButton.render(item)
 
         return render(request, self.template_name, {
             'title' : 'Favorites',
