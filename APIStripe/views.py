@@ -128,12 +128,10 @@ class ProductItem(TemplateView):
     def get(self, request, id, *args, **kwargs):
         item = Item.objects.get(pk = id)
 
-        context = super(ProductItem, self).get_context_data(**kwargs)
-        context.update({
+        return render(request, self.template_name, {
             "item" : item
         })
 
-        return context
 
 class Products(TemplateView):
     template_name = "APIStripe/products.html"
