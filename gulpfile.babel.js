@@ -84,6 +84,18 @@ const watch = {
     fonts: template.src.fonts,
 };
 
+//#region ====================================clean==========================================
+gulp.task('clean', function () {
+    return gulp.src([template.clean], {read: false, allowEmpty: true})
+        .pipe(clean({force: true}));
+});
+
+gulp.task('clean-scss-build', function () {
+    return gulp.src([template.src.scss_dir], {read: false, allowEmpty: true})
+        .pipe(clean({force: true}));
+});
+//#endregion =================================End clean======================================
+
 //#region ====================================js==========================================
 
 function correctRenameHeaderStaticJs(path){
@@ -191,13 +203,37 @@ gulp.task('dev-scripts', gulp.series(
     'dev-base-scripts'
 ));
 
+gulp.task('prod-base-scripts-separation', function (type) {
+    return gulp.src(template.build.js + `**/**/*.js`)
+        .pipe(plumber())
+        .pipe(rigger())
+        .pipe(babel({
+            presets: [
+                ['@babel/env', {
+                    modules: false
+                }]
+            ]
+        }))
+        .pipe(uglify())
+        .pipe(gulp.dest(template.build.js))
+        .pipe(browserSync.reload({
+            stream: true
+        }));
+});
+
 gulp.task('dev-scripts-separation', gulp.series(
     'dev-move-header-js', 
     'dev-move-footer-js'
 ));
 
+gulp.task('prod-scripts-separation', gulp.series(
+    'dev-move-header-js', 
+    'dev-move-footer-js',
+    'prod-base-scripts-separation'
+));
 
-//#endregion =================================End js=================================================
+
+//#endregion =================================End js=======================================
 
 //#region ===================================Css===========================================
 
@@ -277,22 +313,26 @@ gulp.task('prod-base-css-separation', function () {
 
 gulp.task('dev-css', gulp.series( 
     'dev-css',
-    'dev-base-css'
+    'dev-base-css',
+    'clean-scss-build'
 ));
 
 gulp.task('dev-css-separation', gulp.series( 
     'dev-css-separation',
-    'dev-base-css-separation'
+    'dev-base-css-separation',
+    'clean-scss-build'
 ));
 
 gulp.task('prod-css', gulp.series( 
     'dev-css',
-    'prod-base-css'
+    'prod-base-css',
+    'clean-scss-build'
 ));
 
 gulp.task('prod-css-separation', gulp.series( 
     'dev-css-separation',
-    'prod-base-css-separation'
+    'prod-base-css-separation',
+    'clean-scss-build'
 ));
 
 //#endregion ===============================End css================================================
@@ -405,23 +445,18 @@ gulp.task('prod-build', gulp.parallel([
 gulp.task('dev-build-separation', gulp.parallel([
     'fonts',
     'dev-scripts-separation',
-    'dev-css',
+    'dev-css-separation',
     'dev-image',
     'dev-svg-sprite'
 ]));
 
 gulp.task('prod-build-separation', gulp.parallel([
     'fonts',
-    'prod-scripts',
-    'prod-css',
+    'prod-scripts-separation',
+    'prod-css-separation',
     'prod-image',
     'prod-svg-sprite'
 ]));
-
-gulp.task('clean', function () {
-    return gulp.src([template.clean], {read: false, allowEmpty: true})
-        .pipe(clean({force: true}));
-});
 
 gulp.task('clean-and-build-dev', gulp.series(['clean', 'dev-build']));
 gulp.task('clean-and-build-prod', gulp.series(['clean', 'prod-build']));

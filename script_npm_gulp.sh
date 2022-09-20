@@ -36,6 +36,9 @@ ACTION_BUILD_PROD='21'
 ACTION_DEV_BUILD_SEPARATION_JS='22'
 ACTION_DEV_BUILD_SEPARATION_CSS='23'
 
+ACTION_DEV_BUILD_SEPARATION='24'
+ACTION_BUILD_PROD_SEPARATION='25'
+
 action=''
 
 npm_start(){
@@ -115,8 +118,11 @@ echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_LITE] - Build lite dev version (re
 echo -e "$COLOR_TEXT_SKY_BLUE[$ACTION_DEV_BUILD] - Build dev version"
 echo -e "$COLOR_TEXT_GREEN[$ACTION_BUILD_PROD] - Build prod version"
 
-echo -e "$COLOR_RESET[$ACTION_DEV_BUILD_SEPARATION_JS] - Build separation only js (dev)"
-echo -e "$COLOR_RESET[$ACTION_DEV_BUILD_SEPARATION_CSS] - Build separation only css (dev)"
+echo -e "$COLOR_RESET[$ACTION_DEV_BUILD_SEPARATION_JS] - Build only js (dev separation static)"
+echo -e "$COLOR_RESET[$ACTION_DEV_BUILD_SEPARATION_CSS] - Build only css (dev separation static)"
+
+echo -e "$COLOR_TEXT_SKY_BLUE[$ACTION_DEV_BUILD_SEPARATION] - Build dev version (separation static)"
+echo -e "$COLOR_TEXT_GREEN[$ACTION_BUILD_PROD_SEPARATION] - Build prod version (separation static)"
 
 echo -e "$COLOR_RESET[$ACTION_EXIT] - exit"
 
@@ -223,6 +229,11 @@ elif [ "$action" == "$ACTION_DEV_BUILD_SVG_SPRITE" ]; then
     gulp_action='dev-svg-sprite'
 elif [ "$action" == "$ACTION_DEV_BUILD_LITE" ]; then
     gulp_action='dev-build-lite'
+
+elif [ "$action" == "$ACTION_DEV_BUILD_SEPARATION" ]; then
+    gulp_action='dev-build-separation'
+elif [ "$action" == "$ACTION_BUILD_PROD_SEPARATION" ]; then
+    gulp_action='prod-build-separation'
 
 elif [ "$action" == "$ACTION_DEV_BUILD" ]; then
     gulp_action='dev-build'
