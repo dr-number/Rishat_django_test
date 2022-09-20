@@ -1,0 +1,26 @@
+a.ico-link:hover{
+    text-decoration:none;
+}
+
+.ico{
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    vertical-align: middle;
+
+    &.cancel use{
+        fill: rgb(255, 136, 0);
+    }
+
+    &.success use{
+        fill: green;
+    }
+
+    &.error use{
+        fill: red;
+    }
+
+    &.expectation use{
+        fill: rgb(0, 162, 255);
+    }
+}

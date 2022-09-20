@@ -9,7 +9,7 @@ def getCurrentHost(request):
 def get_app_name(request):
     return sys.modules[resolve(request.path_info).func.__module__].__package__
 
-def include_static(dir, allow, to_top=[], to_end=[], init=[]):
+def include_static(dir, allow, to_top=[], to_end=[], init=[], exp=''):
 
     filelist = []
     list_dir = os.walk(dir)
@@ -26,7 +26,11 @@ def include_static(dir, allow, to_top=[], to_end=[], init=[]):
     for root, dirs, files in list_dir: 
         for file in files: 
             filelist.append(os.path.join(root, file))
+
             for name in filelist: 
+                if exp and exp != os.path.splitext(name)[1]:
+                    continue
+
                 filter = name.split("/")
                 if list(set(allow) & set(filter)):
 
@@ -56,19 +60,27 @@ def custom_render(request, template_name, data = {}):
 
     app_name = get_app_name(request)
 
+    header_js = include_static('static/js/header', 
+        {app_name, 'init', 'main'}, 
+        {'ajax_server.js'},
+        {'init.js'}
+    )
+
+    footer_js = include_static('static/js/footer', 
+        {app_name, 'custom_user', 'init', 'main'},
+        to_end={'init.js'},
+        init={'ajax_modals.js', 'question.js'}
+    )
+
+    styles_css = include_static('static/css/', 
+        {app_name, 'custom_user', 'main', 'favorites', 'APIStripe'},
+        exp='.css'
+    )
+
     data.update({ 
-        'header_js' : include_static(
-                'static/js/header', 
-                {app_name, 'init', 'main'}, 
-                {'ajax_server.js'},
-                {'init.js'}
-            ),
-        'footer_js' : include_static(
-                'static/js/footer', 
-                {app_name, 'custom_user', 'init', 'main'},
-                to_end={'init.js'},
-                init={'ajax_modals.js', 'question.js'}
-            ),
+        'header_js' : header_js,
+        'footer_js' : footer_js,
+        'styles_css' : styles_css
     })
 
     from django import shortcuts

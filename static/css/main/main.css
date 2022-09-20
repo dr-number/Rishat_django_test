@@ -1,0 +1,18 @@
+a.ico-link:hover {
+  text-decoration: none; }
+
+.ico {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  vertical-align: middle; }
+  .ico.cancel use {
+    fill: #ff8800; }
+  .ico.success use {
+    fill: green; }
+  .ico.error use {
+    fill: red; }
+  .ico.expectation use {
+    fill: #00a2ff; }
+
+/*# sourceMappingURL=main.css.map */

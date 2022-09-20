@@ -68,6 +68,7 @@ const template = {
             `./${DIR_BUILD_STATIC}/js/footer_all.js`
         ],
         scss: `./${DIR_BUILD_STATIC}/scss/main.scss`,
+        scss_dir: `./${DIR_BUILD_STATIC}/scss/`,
         img: `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}img/**/*.*`, 
         fonts: `./${DIR_MAIN_APP}/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}fonts/*.*`,
         svg: `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}svg/*.svg`
@@ -199,11 +200,36 @@ gulp.task('dev-scripts-separation', gulp.series(
 //#endregion =================================End js=================================================
 
 //#region ===================================Css===========================================
+
+function correctRenameStaticCss(path){
+    dirname_path = path.dirname.split('/')
+    path.dirname = dirname_path[0] + '/'
+}
+
 gulp.task('dev-css', function() {
     return gulp.src(template.src.app_css_scss)
      .pipe(concat('main.scss')) 
      .pipe(gulp.dest(`./${DIR_BUILD_STATIC}/scss/`));
   });
+
+gulp.task('dev-css-separation', function() {
+
+    return gulp.src(template.src.app_css_scss)
+        .pipe(rename(correctRenameStaticCss))
+        .pipe(gulp.dest(template.src.scss_dir));
+});
+
+gulp.task('dev-base-css-separation', function () {
+    return gulp.src(template.src.scss_dir + `**/*.*`)
+        .pipe(plumber())
+        .pipe(sourcemaps.init())
+        .pipe(sass())
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest(template.build.css))
+        .pipe(browserSync.reload({
+            stream: true
+        }));
+});
 
   gulp.task('dev-base-css', function () {
     return gulp.src(template.src.scss)
@@ -233,14 +259,40 @@ gulp.task('prod-base-css', function () {
         .pipe(gulp.dest(template.build.css))
 });
 
+gulp.task('prod-base-css-separation', function () {
+
+    return gulp.src(template.src.scss_dir + `**/*.*`)
+        .pipe(sass())
+        .pipe(postcss([
+            pxtorem(),
+            autoprefixer({
+                overrideBrowserslist: ['last 2 versions'],
+                cascade: false,
+                grid: true
+            }),
+            cssnano()
+        ]))
+        .pipe(gulp.dest(template.build.css))
+});
+
 gulp.task('dev-css', gulp.series( 
     'dev-css',
     'dev-base-css'
 ));
 
+gulp.task('dev-css-separation', gulp.series( 
+    'dev-css-separation',
+    'dev-base-css-separation'
+));
+
 gulp.task('prod-css', gulp.series( 
     'dev-css',
     'prod-base-css'
+));
+
+gulp.task('prod-css-separation', gulp.series( 
+    'dev-css-separation',
+    'prod-base-css-separation'
 ));
 
 //#endregion ===============================End css================================================
@@ -343,6 +395,22 @@ gulp.task('dev-build', gulp.parallel([
 ]));
 
 gulp.task('prod-build', gulp.parallel([
+    'fonts',
+    'prod-scripts',
+    'prod-css',
+    'prod-image',
+    'prod-svg-sprite'
+]));
+
+gulp.task('dev-build-separation', gulp.parallel([
+    'fonts',
+    'dev-scripts-separation',
+    'dev-css',
+    'dev-image',
+    'dev-svg-sprite'
+]));
+
+gulp.task('prod-build-separation', gulp.parallel([
     'fonts',
     'prod-scripts',
     'prod-css',

@@ -1,0 +1,12 @@
+.ico-favorites-on use {
+  fill: red; }
+
+.ico-favorites-off use {
+  fill: #c9c9c9; }
+
+.favorite-delete {
+  background-color: red; }
+  .favorite-delete .ico use {
+    fill: #fff; }
+
+/*# sourceMappingURL=favorites.css.map */

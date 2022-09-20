@@ -1,0 +1,23 @@
+.paginations {
+  text-align: center; }
+  .paginations .page-num {
+    list-style: none;
+    text-align: center;
+    display: inline-block; }
+    .paginations .page-num span {
+      display: block;
+      border-radius: 5px;
+      color: #fff;
+      border: gray 1px solid;
+      padding: 10px;
+      background-color: green; }
+    .paginations .page-num a {
+      display: block;
+      border-radius: 5px;
+      color: gray;
+      border: gray 1px solid;
+      padding: 10px; }
+      .paginations .page-num a:hover {
+        text-decoration: none; }
+
+/*# sourceMappingURL=pagination.css.map */

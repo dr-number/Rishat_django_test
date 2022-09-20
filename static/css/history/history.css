@@ -1,0 +1,23 @@
+.history {
+  padding: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  border: #e5e5e5 1px solid; }
+  .history:hover {
+    border: #000 1px solid; }
+  .history .product {
+    border: none; }
+
+.shopping-in-day {
+  text-align: center;
+  font-weight: bold;
+  background-color: #adc;
+  border-radius: 10px; }
+
+.total-cost, .history-data {
+  display: flex;
+  justify-content: flex-end; }
+  .total-cost div, .history-data div {
+    padding: 0 5px; }
+
+/*# sourceMappingURL=history.css.map */

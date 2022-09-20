@@ -1,0 +1,1 @@
+{"version":3,"file":"basket.css","sources":["basket/basket.scss"],"sourcesContent":[".product{\n    .count-in-basket{\n        width: 50px;\n        text-align: center;\n    }\n}"],"names":[],"mappings":"AAAA,AACI,QADI,CACJ,gBAAgB,CAAA;EACZ,KAAK,EAAE,IAAI;EACX,UAAU,EAAE,MAAM,GACrB"}
