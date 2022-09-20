@@ -85,20 +85,27 @@ const watch = {
 
 //#region ====================================js==========================================
 
-function correctRenameStaticJs(path){
-    data = path.dirname.split('/')
+function correctRenameHeaderStaticJs(path){
 
-    if (path.dirname == '.')
+    if (path.dirname == '.'){
+        console.log(path)
+        path.dirname = 'header/init/'
         return
+    }
 
     dirname_path = path.dirname.split('/')
-    path.dirname = dirname_path[2] + '/'
+    path.dirname = dirname_path[2] + '/' + dirname_path[0] + '/'
+}
 
+function correctRenameFooterStaticJs(path){
 
-    console.log(path.dirname)
+    if (path.dirname == '.'){
+        path.dirname = 'footer/init/'
+        return
+    }
 
-    //console.log(data)
-    //path.dirname = data
+    dirname_path = path.dirname.split('/')
+    path.dirname = dirname_path[2] + '/' + dirname_path[0] + '/'
 }
 
 gulp.task('dev-move-header-js', function() {
@@ -107,7 +114,7 @@ gulp.task('dev-move-header-js', function() {
     params.push(JS_INIT_HEADER);
 
     return gulp.src(params)
-     .pipe(rename(correctRenameStaticJs))
+     .pipe(rename(correctRenameHeaderStaticJs))
      .pipe(gulp.dest(template.build.js));
   });
 
@@ -118,7 +125,7 @@ gulp.task('dev-move-header-js', function() {
     params.push(JS_AFTER_INIT_FOOTER);
 
     return gulp.src(params)
-        .pipe(rename(correctRenameStaticJs))
+        .pipe(rename(correctRenameFooterStaticJs))
         .pipe(gulp.dest(template.build.js));
     });
 

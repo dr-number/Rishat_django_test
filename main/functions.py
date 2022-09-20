@@ -9,18 +9,44 @@ def getCurrentHost(request):
 def get_app_name(request):
     return sys.modules[resolve(request.path_info).func.__module__].__package__
 
-def scan_dir(dir):
+def include_static(dir, allow, to_top=[], to_end=[], init=[]):
 
     filelist = []
     list_dir = os.walk(dir)
 
     result = []
+    to_end_file = []
+    to_top_file = []
+    to_init_file = []
+
+    to_top = set(to_top)
+    to_end = set(to_end)
+    init = set(init)
     
     for root, dirs, files in list_dir: 
         for file in files: 
             filelist.append(os.path.join(root, file))
             for name in filelist: 
-                result.append(name)
+                filter = name.split("/")
+                if list(set(allow) & set(filter)):
+
+                    if (to_top & set(filter)):
+                        to_top_file.append(name)
+                    elif (to_end & set(filter)):
+                        to_end_file.append(name)
+                    elif (init & set(filter)):
+                        to_init_file.append(name)
+                    else:
+                        result.append(name)
+
+    if to_top_file:
+        result = to_top_file + result
+
+    if to_end_file:
+        result = result + to_end_file
+
+    if to_init_file:
+        result = result + to_init_file
 
     return list(dict.fromkeys(result))
 
@@ -28,11 +54,23 @@ def scan_dir(dir):
 
 def custom_render(request, template_name, data = {}):
 
+    app_name = get_app_name(request)
+
+    data.update({ 
+        'header_js' : include_static(
+                'static/js/header', 
+                {app_name, 'init', 'main'}, 
+                {'ajax_server.js'},
+                {'init.js'}
+            ),
+        'footer_js' : include_static('static/js/footer', 
+                {app_name, 'custom_user', 'init', 'main'},
+                to_end={'init.js'},
+                init={'ajax_modals.js', 'question.js'}
+            ),
+    })
+
     from django import shortcuts
-
-
-    data.update({ 'dynamic_static_js' : scan_dir('static/js') })
-
     return shortcuts.render(request, template_name, data)
 
 
