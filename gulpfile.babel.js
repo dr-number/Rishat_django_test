@@ -88,7 +88,6 @@ const watch = {
 function correctRenameHeaderStaticJs(path){
 
     if (path.dirname == '.'){
-        console.log(path)
         path.dirname = 'header/init/'
         return
     }

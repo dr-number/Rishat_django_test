@@ -63,7 +63,8 @@ def custom_render(request, template_name, data = {}):
                 {'ajax_server.js'},
                 {'init.js'}
             ),
-        'footer_js' : include_static('static/js/footer', 
+        'footer_js' : include_static(
+                'static/js/footer', 
                 {app_name, 'custom_user', 'init', 'main'},
                 to_end={'init.js'},
                 init={'ajax_modals.js', 'question.js'}
