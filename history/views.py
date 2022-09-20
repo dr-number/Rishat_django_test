@@ -1,9 +1,9 @@
 import json
-from django.shortcuts import render
 from django.urls import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.core.paginator import Paginator
+from main.functions import custom_render
 
 from history.models import HistoryItem
 from main.constants import COUNT_PRODUCTS_ON_PAGE
@@ -38,7 +38,7 @@ class History(TemplateView):
 
             is_first_page = False
 
-        return render(request, self.template_name, {
+        return custom_render(request, self.template_name, {
             'title' : 'History',
             'page_obj' : page_obj,
             'count' : len(history),

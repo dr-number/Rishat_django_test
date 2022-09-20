@@ -1,5 +1,4 @@
 import stripe
-from django.shortcuts import render
 from django.conf import settings
 from django.views import View
 from django.http import JsonResponse
@@ -13,10 +12,9 @@ from favorites.models import FavoritesItem
 
 from django.core.paginator import Paginator
 from history.functions_history import HISTORY_STATUS_CANCEL, HISTORY_STATUS_SUCCESS, prepare_array, prepare_data, set_history, update_status
-from history.views import History
 from main.callback import render_button_ajax_modal
 from main.constants import COUNT_PRODUCTS_ON_PAGE
-from main.functions import ModelJsonData
+from main.functions import ModelJsonData, custom_render
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -141,7 +139,7 @@ class Success(TemplateView):
         if(request.user.is_authenticated):
             update_status(request.GET["id"], HISTORY_STATUS_SUCCESS)
 
-        return render(request, self.template_name, {
+        return custom_render(request, self.template_name, {
             'title' : 'Success'
         })
 
@@ -152,7 +150,7 @@ class Cancel(TemplateView):
         if(request.user.is_authenticated):
             update_status(request.GET["id"], HISTORY_STATUS_CANCEL)
 
-        return render(request, self.template_name, {
+        return custom_render(request, self.template_name, {
             'title' : 'Cancel'
         })
 
@@ -163,7 +161,7 @@ class ProductItem(TemplateView):
     def get(self, request, id, *args, **kwargs):
         item = Item.objects.get(pk = id)
 
-        return render(request, self.template_name, {
+        return custom_render(request, self.template_name, {
             "item" : item
         })
 
@@ -203,7 +201,7 @@ class Products(TemplateView):
         countrySpec = CountrySpec()
         currencies = countrySpec.get_data()
 
-        return render(request, self.template_name, {
+        return custom_render(request, self.template_name, {
             'title' : 'Products',
             'page_obj' : page_obj,
             'count' : len(products),

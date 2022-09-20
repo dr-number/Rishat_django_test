@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import TemplateView
 from django.views import View
@@ -7,6 +7,7 @@ from django.http import JsonResponse
 from APIStripe.models import Item
 
 from favorites.models import FavoritesItem
+from main.functions import custom_render
 
 from django.core.paginator import Paginator
 from main.callback import prepare_params
@@ -52,7 +53,7 @@ class Favorites(TemplateView):
         ids = modelJsonData.getData(FavoritesItem, 'user_id', request.user.id, 'products_id')
 
         if not ids:
-            return render(request, self.template_name, {
+            return custom_render(request, self.template_name, {
                 'title' : 'Favorites'
             })
 
@@ -67,7 +68,7 @@ class Favorites(TemplateView):
         for item in page_obj:
             item.data_delete = renderDeleteButton.render(item)
 
-        return render(request, self.template_name, {
+        return custom_render(request, self.template_name, {
             'title' : 'Favorites',
             'page_obj' : page_obj,
             'count_type' : count_products

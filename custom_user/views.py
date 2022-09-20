@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse
 from custom_user.forms import RegistrationForm, AuthorizationForm
 from custom_user.models import UserCustom
 from django.views.generic import TemplateView
 
 from django.views import View
+from main.functions import custom_render
 
 class Registration(TemplateView):
     template_name = 'custom_user/registration.html'
@@ -14,7 +15,7 @@ class Registration(TemplateView):
         UserCustom.objects.update_or_create(user=user, defaults={'Description': user.custom_user.description},)
     
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {'form': RegistrationForm()})
+        return custom_render(request, self.template_name, {'form': RegistrationForm()})
 
 
     def post(self, request, *args, **kwargs):
@@ -38,13 +39,13 @@ class Registration(TemplateView):
             # redirect user to products page
             return redirect(reverse('products'))
 
-        return render(request, self.template_name, {'form': form})
+        return custom_render(request, self.template_name, {'form': form})
 
 class Authorization(TemplateView):
     template_name = 'custom_user/authorisation.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {'form': AuthorizationForm()})
+        return custom_render(request, self.template_name, {'form': AuthorizationForm()})
 
     def post(self, request, *args, **kwargs):
 
@@ -57,7 +58,7 @@ class Authorization(TemplateView):
             login(request,user)
             return redirect(reverse('products'))
        
-        return render(request, self.template_name, {'form': AuthorizationForm(request.POST)})
+        return custom_render(request, self.template_name, {'form': AuthorizationForm(request.POST)})
 
 class Signout(View):
     def get(self, request, *args, **kwargs):

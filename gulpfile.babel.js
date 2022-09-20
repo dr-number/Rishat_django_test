@@ -50,9 +50,14 @@ const template = {
             header: [
                 `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}js/header/*.js`, 
                 `!` + JS_INIT_HEADER,
-                `!` + JS_AFTER_INIT_FOOTER
+                `!` + JS_AFTER_INIT_FOOTER,
+                `!./` + DIR_BUILD_STATIC + `/**`
             ],
-            footer: [`./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}js/footer/*.js`, `!` + JS_INIT_FOOTER]
+            footer: [
+                `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}js/footer/*.js`, 
+                `!` + JS_INIT_FOOTER,
+                `!./` + DIR_BUILD_STATIC + `/**`
+            ]
 
         },
 
@@ -80,13 +85,50 @@ const watch = {
 
 //#region ====================================js==========================================
 
+function correctRenameStaticJs(path){
+    data = path.dirname.split('/')
+
+    if (path.dirname == '.')
+        return
+
+    dirname_path = path.dirname.split('/')
+    path.dirname = dirname_path[2] + '/'
+
+
+    console.log(path.dirname)
+
+    //console.log(data)
+    //path.dirname = data
+}
+
+gulp.task('dev-move-header-js', function() {
+    
+    const params = template.src.app_js.header;
+    params.push(JS_INIT_HEADER);
+
+    return gulp.src(params)
+     .pipe(rename(correctRenameStaticJs))
+     .pipe(gulp.dest(template.build.js));
+  });
+
+  gulp.task('dev-move-footer-js', function() {
+
+    const params = template.src.app_js.footer;
+    params.push(JS_INIT_FOOTER);
+    params.push(JS_AFTER_INIT_FOOTER);
+
+    return gulp.src(params)
+        .pipe(rename(correctRenameStaticJs))
+        .pipe(gulp.dest(template.build.js));
+    });
+
+
 gulp.task('dev-concat-header-js', function() {
     
     const params = template.src.app_js.header;
     params.push(JS_INIT_HEADER);
 
     return gulp.src(params)
-    // .pipe(debug())
      .pipe(concat('header_all.js')) 
      .pipe(gulp.dest(template.build.js));
   });
@@ -141,6 +183,12 @@ gulp.task('dev-scripts', gulp.series(
     'dev-concat-footer-js',
     'dev-base-scripts'
 ));
+
+gulp.task('dev-scripts-separation', gulp.series(
+    'dev-move-header-js', 
+    'dev-move-footer-js'
+));
+
 
 //#endregion =================================End js=================================================
 

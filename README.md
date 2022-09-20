@@ -34,8 +34,8 @@ You have access to the page with favorites products http://localhost:8000/favori
 If there are more than 10 products on the page, pagination is activated
 
 ## Deploy 
-- **http://71cf-5-128-71-145.ngrok.io**
-- **https://71cf-5-128-71-145.ngrok.io**
+- **http://019c-5-128-71-145.ngrok.io**
+- **https://019c-5-128-71-145.ngrok.io**
 
 ## Video demonstration on YouTube
 [![Python Django. API Stripe](https://github.com/dr-number/Rishat_django_test/blob/main/z_for_read_me/screen_for_video.png)](https://youtu.be/z7UWDztJwnw)

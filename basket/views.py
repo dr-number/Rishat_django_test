@@ -2,12 +2,12 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from django.views import View
 from django.views.generic import TemplateView
-from django.shortcuts import render
-from django.core.paginator import Paginator
 import json
 
 from APIStripe.models import Item
 from APIStripe.views import CountrySpec, RenderBuyButton
+
+from main.functions import custom_render
 
 class Change(View):
     __ADD_TO_BASKET = "1"
@@ -74,7 +74,7 @@ class Basket(TemplateView):
         countrySpec = CountrySpec()
         currencies = countrySpec.get_data()
 
-        return render(request, self.template_name, {
+        return custom_render(request, self.template_name, {
             "title" : "Basket",
             "products" : basket_products,
             "count_type" : count_type,

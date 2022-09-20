@@ -24,14 +24,16 @@ ACTION_CREATE_STRUCTURE_DIR_FOR_APP='12'
 ACTION_CREATE_STRUCTURE_DIR_FOR_WIDGET='13'
 
 ACTION_DEV_BUILD_JS='14'
-ACTION_DEV_BUILD_CSS='15'
-ACTION_DEV_BUILD_IMAGE='16'
-ACTION_DEV_BUILD_SVG_SPRITE='17'
-ACTION_BUILD_FONTS='18'
-ACTION_DEV_BUILD_LITE='19'
+ACTION_DEV_BUILD_SEPARATION_JS='15'
 
-ACTION_DEV_BUILD='20'
-ACTION_BUILD_PROD='21'
+ACTION_DEV_BUILD_CSS='16'
+ACTION_DEV_BUILD_IMAGE='17'
+ACTION_DEV_BUILD_SVG_SPRITE='18'
+ACTION_BUILD_FONTS='19'
+ACTION_DEV_BUILD_LITE='20'
+
+ACTION_DEV_BUILD='21'
+ACTION_BUILD_PROD='22'
 
 action=''
 
@@ -102,6 +104,8 @@ echo -e "$COLOR_TEXT_GREEN[$ACTION_CREATE_STRUCTURE_DIR_FOR_APP] - Create struct
 echo -e "$COLOR_TEXT_GREEN[$ACTION_CREATE_STRUCTURE_DIR_FOR_WIDGET] - Create structure directory for widget"
 
 echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_JS] - Build only js (dev)"
+echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_SEPARATION_JS] - Build separation only js (dev)"
+
 echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_CSS] - Build only css (dev)"
 echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_IMAGE] - Build only images (dev)"
 echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_SVG_SPRITE] - Build only svg sprite (dev)"
@@ -206,6 +210,8 @@ elif [ "$action" == "$ACTION_DEV_BUILD_CSS" ]; then
     gulp_action='dev-css'
 elif [ "$action" == "$ACTION_DEV_BUILD_IMAGE" ]; then
     gulp_action='dev-image'
+elif [ "$action" == "$ACTION_DEV_BUILD_SEPARATION_JS" ]; then
+    gulp_action='dev-scripts-separation'
 elif [ "$action" == "$ACTION_DEV_BUILD_JS" ]; then
     gulp_action='dev-scripts'
 elif [ "$action" == "$ACTION_DEV_BUILD_SVG_SPRITE" ]; then
