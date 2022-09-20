@@ -213,22 +213,18 @@ class CountrySpec():
     __CACHE_NAME = 'payment_currencies'
     __TTL = 1000 * 60 * 60 * 24 * 30
 
-    def __get_result(self, currencies):
-
+    def __optimization_for_cache(self, currencies):
         currencies = currencies.replace("[", "").replace("]", "")
         currencies = currencies.replace('\"', "")
         currencies = currencies.split(", ")
-
-        return json.dumps({
-            "currencies": currencies
-        })
+        return currencies
 
     def get_data(self):
 
         payment_currencies = cache.get(self.__CACHE_NAME)
         
         if payment_currencies:
-            return self.__get_result(payment_currencies)
+            return json.dumps(payment_currencies)
 
         data = stripe.CountrySpec.retrieve("US")
         payment_currencies = data["supported_payment_currencies"]
@@ -236,7 +232,9 @@ class CountrySpec():
         if not payment_currencies:
             return None
 
-        cache.set(self.__CACHE_NAME, json.dumps(payment_currencies), self.__TTL)
-        return self.__get_result(payment_currencies)
+        payment_currencies = self.__optimization_for_cache(json.dumps(payment_currencies))
+
+        cache.set(self.__CACHE_NAME, payment_currencies, self.__TTL)
+        return json.dumps(payment_currencies)
 
 

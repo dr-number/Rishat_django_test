@@ -12,7 +12,6 @@ function renderSelectCurently(){
   if(currencies && select){
     
     currencies = JSON.parse(currencies.innerHTML);
-    currencies = currencies["currencies"];
 
     currencies.forEach(item => {
       opt = document.createElement('option');
