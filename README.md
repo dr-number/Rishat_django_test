@@ -27,7 +27,9 @@ After this you may:
 3) Click on the button **Buy all**
 
 ## After authorization 
-You have access to the page with favorites products http://localhost:8000/favorites/
+You have access to the page with 
+- favorites products http://localhost:8000/favorites/
+- shoping history http://localhost:8000/history/
 
 
 
