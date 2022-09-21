@@ -14,6 +14,7 @@ Then run
 
     ./script_main.sh
 
+(actions in script_main.sh)
 - And run **[7] - Django make and apply migrations**
 - And then create user **[8] - Registration in Django administration**
 
