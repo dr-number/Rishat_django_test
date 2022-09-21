@@ -14,8 +14,8 @@ Then run
 
     ./script_main.sh
 
-And run **[7] - Django make and apply migrations**
-And then create user **[8] - Registration in Django administration**
+- And run **[7] - Django make and apply migrations**
+- And then create user **[8] - Registration in Django administration**
 
 After this you may:
 - Go to **Admin panel** http://localhost:8000/admin/
