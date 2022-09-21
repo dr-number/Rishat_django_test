@@ -5,6 +5,16 @@ from django.urls import resolve
 from django.shortcuts import render
 from rishat_test.settings import IS_SEPARATION_STATIC, STRIPE_PUBLIC_KEY
 
+def get_client_ip(request):
+    
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+
+    return ip
+
 def getCurrentHost(request):
     return request.META['HTTP_REFERER']
 
@@ -86,7 +96,7 @@ def custom_render(request, template_name, data = {}):
     )
 
     data.update(STRIPE_KEY)
-    
+
     data.update({ 
         'header_js' : header_js,
         'footer_js' : footer_js,

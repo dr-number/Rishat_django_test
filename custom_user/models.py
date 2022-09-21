@@ -11,3 +11,13 @@ class UserCustom(models.Model):
     class Meta:
         verbose_name = 'Profile'
         verbose_name_plural = 'Profiles'
+
+class TemporaryBanIp(models.Model):
+    ip_address = models.GenericIPAddressField("IP address")
+    attempts = models.IntegerField("Failed attempts", default=0)
+    time_unblock = models.DateTimeField("Time ban", blank=True)
+    status = models.BooleanField("Status ban", default=False)
+ 
+    def __str__(self):
+        return self.ip_address
+
