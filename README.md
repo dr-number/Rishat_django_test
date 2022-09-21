@@ -15,9 +15,10 @@ Then run
     ./script_main.sh
 
 And run **[7] - Django make and apply migrations**
+And then create user **[8] - Registration in Django administration**
 
 After this you may:
-- Go to **Admin panel** http://localhost:8000/admin/ (username: **root** password: **root**)
+- Go to **Admin panel** http://localhost:8000/admin/
 - Go to **All products** http://localhost:8000/
 - Go to **All basket** http://localhost:8000/basket/
 
