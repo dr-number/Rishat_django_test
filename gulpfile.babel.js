@@ -39,9 +39,15 @@ const template = {
         img: `./${DIR_BUILD_STATIC}/img/`,
         fonts: `./${DIR_BUILD_STATIC}/fonts/`,
         svg: `./${DIR_BUILD_STATIC}/svg/`,
+        favicon : `./${DIR_BUILD_STATIC}/favicon/`
+        
     },
     src: { //from where
         //Синтаксис original/**/*.* означает - взять все файлы всех расширений из папки и из вложенных каталогов
+        favicon: [
+            `./main/res_favicon/*.*`,
+            `!./main/res_favicon/favicon-info.txt`,
+        ],
         app_css_scss: [
             `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}scss/*.css`,
             `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}scss/*.scss`
@@ -61,8 +67,6 @@ const template = {
 
         },
 
-        modals: `./**/templates/**/modals/*.html`,
-
         js: [
             `./${DIR_BUILD_STATIC}/js/header_all.js`,
             `./${DIR_BUILD_STATIC}/js/footer_all.js`
@@ -72,6 +76,7 @@ const template = {
         img: `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}img/**/*.*`, 
         fonts: `./${DIR_MAIN_APP}/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}fonts/*.*`,
         svg: `./**/${DIR_SATIC_APP}/${DIR_PREFIX_SATIC_APP}svg/*.svg`
+        
     },
     clean: `./${DIR_BUILD_STATIC}`
 };
@@ -95,6 +100,13 @@ gulp.task('clean-scss-build', function () {
         .pipe(clean({force: true}));
 });
 //#endregion =================================End clean======================================
+
+//#region ====================================favicon========================================
+gulp.task('favicon', function() {
+    return gulp.src(template.src.favicon)
+     .pipe(gulp.dest(template.build.favicon));
+  });
+//#endregion =================================End favicon======================================
 
 //#region ====================================js==========================================
 
@@ -431,7 +443,8 @@ gulp.task('dev-build', gulp.parallel([
     'dev-scripts',
     'dev-css',
     'dev-image',
-    'dev-svg-sprite'
+    'dev-svg-sprite',
+    'favicon'
 ]));
 
 gulp.task('prod-build', gulp.parallel([
@@ -439,7 +452,8 @@ gulp.task('prod-build', gulp.parallel([
     'prod-scripts',
     'prod-css',
     'prod-image',
-    'prod-svg-sprite'
+    'prod-svg-sprite',
+    'favicon'
 ]));
 
 gulp.task('dev-build-separation', gulp.parallel([
@@ -447,7 +461,8 @@ gulp.task('dev-build-separation', gulp.parallel([
     'dev-scripts-separation',
     'dev-css-separation',
     'dev-image',
-    'dev-svg-sprite'
+    'dev-svg-sprite',
+    'favicon'
 ]));
 
 gulp.task('prod-build-separation', gulp.parallel([
@@ -455,7 +470,8 @@ gulp.task('prod-build-separation', gulp.parallel([
     'prod-scripts-separation',
     'prod-css-separation',
     'prod-image',
-    'prod-svg-sprite'
+    'prod-svg-sprite',
+    'favicon'
 ]));
 
 gulp.task('clean-and-build-dev', gulp.series(['clean', 'dev-build']));

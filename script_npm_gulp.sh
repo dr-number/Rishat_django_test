@@ -29,16 +29,17 @@ ACTION_DEV_BUILD_CSS='16'
 ACTION_DEV_BUILD_IMAGE='17'
 ACTION_DEV_BUILD_SVG_SPRITE='18'
 ACTION_BUILD_FONTS='19'
-ACTION_DEV_BUILD_LITE='20'
+ACTION_BUILD_FAVICON='20'
+ACTION_DEV_BUILD_LITE='21'
 
-ACTION_DEV_BUILD='21'
-ACTION_BUILD_PROD='22'
+ACTION_DEV_BUILD='22'
+ACTION_BUILD_PROD='23'
 
-ACTION_DEV_BUILD_SEPARATION_JS='23'
-ACTION_DEV_BUILD_SEPARATION_CSS='24'
+ACTION_DEV_BUILD_SEPARATION_JS='24'
+ACTION_DEV_BUILD_SEPARATION_CSS='25'
 
-ACTION_DEV_BUILD_SEPARATION='25'
-ACTION_BUILD_PROD_SEPARATION='26'
+ACTION_DEV_BUILD_SEPARATION='26'
+ACTION_BUILD_PROD_SEPARATION='27'
 
 action=''
 
@@ -56,15 +57,16 @@ npm_start(){
 createStructDirApp(){
 
     appName="$1"
-    isCreateDirFonts="$2"
+    isMainApp="$2"
 
     echo "$appName"
 
     if [  -d "./$appName" ]; then
         cd "$appName"
 
-        if [ "$isCreateDirFonts" == "Y" ] || [ "$isCreateDirFonts" == "y" ]; then
+        if [ "$isMainApp" == "Y" ] || [ "$isMainApp" == "y" ]; then
             mkdir -p "./res_fonts";
+            mkdir -p "./res_favicon";
         fi
 
         mkdir -p "./res_scss";
@@ -115,6 +117,7 @@ echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_CSS] - Build only css (dev)"
 echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_IMAGE] - Build only images (dev)"
 echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_SVG_SPRITE] - Build only svg sprite (dev)"
 echo -e "$COLOR_TEXT_YELLOW[$ACTION_BUILD_FONTS] - Build only fonts (for all)"
+echo -e "$COLOR_TEXT_YELLOW[$ACTION_BUILD_FAVICON] - Build only favicon (for all)"
 echo -e "$COLOR_TEXT_YELLOW[$ACTION_DEV_BUILD_LITE] - Build lite dev version (rebuild only js and css)"
 
 echo -e "$COLOR_TEXT_SKY_BLUE[$ACTION_DEV_BUILD] - Build dev version"
@@ -214,12 +217,16 @@ elif [ "$action" == "$ACTION_CREATE_STRUCTURE_DIR_FOR_APP" ]; then
     echo "Enter name app: "
     read appName
 
-    isCreateDirFonts='N'
-    echo "Create fonts folder (default [N]): [Y/N]"
-    read isCreateDirFonts
+    isMainApp = "N"
 
-    createStructDirApp "$appName" isCreateDirFonts
+    if [ "$appName" == "main" ]; then
+        isMainApp = "Y"
+    fi
 
+    createStructDirApp "$appName" isMainApp
+
+elif [ "$action" == "$ACTION_BUILD_FAVICON" ]; then
+    gulp_action='favicon'
 elif [ "$action" == "$ACTION_BUILD_FONTS" ]; then
     gulp_action='fonts'
 elif [ "$action" == "$ACTION_DEV_BUILD_CSS" ]; then
