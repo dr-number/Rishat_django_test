@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     {% endif %}
 
-  
+    <script id="stripe_public_key">const STRIPE_PUBLIC_KEY = "{{ stripe_public_key }}"</script>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
     <script src="https://js.stripe.com/v3/"></script>

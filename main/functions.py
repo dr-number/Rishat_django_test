@@ -2,6 +2,8 @@ import json
 import os
 import sys
 from django.urls import resolve
+from django.shortcuts import render
+from rishat_test.settings import IS_SEPARATION_STATIC, STRIPE_PUBLIC_KEY
 
 def getCurrentHost(request):
     return request.META['HTTP_REFERER']
@@ -34,11 +36,11 @@ def include_static(dir, allow, to_top=[], to_end=[], init=[], exp=''):
                 filter = name.split("/")
                 if list(set(allow) & set(filter)):
 
-                    if (to_top & set(filter)):
+                    if to_top and (to_top & set(filter)):
                         to_top_file.append(name)
-                    elif (to_end & set(filter)):
+                    elif to_end and (to_end & set(filter)):
                         to_end_file.append(name)
-                    elif (init & set(filter)):
+                    elif init and (init & set(filter)):
                         to_init_file.append(name)
                     else:
                         result.append(name)
@@ -57,6 +59,12 @@ def include_static(dir, allow, to_top=[], to_end=[], init=[], exp=''):
 
 
 def custom_render(request, template_name, data = {}):
+
+    STRIPE_KEY = { 'stripe_public_key' : STRIPE_PUBLIC_KEY }
+
+    if not IS_SEPARATION_STATIC:
+        data.update(STRIPE_KEY)
+        return render(request, template_name, data)
 
     app_name = get_app_name(request)
 
@@ -77,14 +85,15 @@ def custom_render(request, template_name, data = {}):
         exp='.css'
     )
 
+    data.update(STRIPE_KEY)
+    
     data.update({ 
         'header_js' : header_js,
         'footer_js' : footer_js,
         'styles_css' : styles_css
     })
 
-    from django import shortcuts
-    return shortcuts.render(request, template_name, data)
+    return render(request, template_name, data)
 
 
 class ModelJsonData:

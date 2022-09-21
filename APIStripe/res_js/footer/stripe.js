@@ -3,7 +3,7 @@ class APIStripe{
     #stripe = undefined
     
     constructor(){
-        this.#stripe = Stripe("pk_test_51LgR6IHVRJovbZDJEifEzGWqm5oSz8d6XlLpLMHYrdRPi5NeZb251Vqe7SzwouLYhtlvBYZIebzm6hnDPfK5jPNT00NNFTs3Zl");
+        this.#stripe = Stripe(STRIPE_PUBLIC_KEY);
         this.initCheckOut();
         this.initBasketByAll();
     }

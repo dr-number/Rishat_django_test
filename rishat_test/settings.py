@@ -134,6 +134,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+IS_SEPARATION_STATIC = True
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
@@ -170,4 +172,3 @@ CSRF_TRUSTED_ORIGINS = [
         'http://' + TUNEL_PREFIX + '-5-128-71-145.ngrok.io',
         'https://' + TUNEL_PREFIX + '-5-128-71-145.ngrok.io'
     ]
-
