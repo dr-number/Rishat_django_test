@@ -88,7 +88,7 @@ def custom_render(request: HttpRequest, template_name: str, data: set = {}) -> H
     )
 
     footer_js = include_static('static/js/footer', 
-        {app_name, 'custom_user', 'init', 'main', 'basket', 'APIStripe'},
+        {app_name, 'custom_user', 'init', 'main', 'basket', 'APIStripe', 'favorites'},
         to_end={'init.js'},
         init={'ajax_modals.js', 'question.js'}
     )
