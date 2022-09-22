@@ -3,5 +3,3 @@ psycopg2>=2.8
 debugpy==1.6.3
 django-debug-toolbar==3.6.0
 dj-stripe==2.6.2
-#setuptools==65.3.0
-# psycopg2-binary~=2.9.3
