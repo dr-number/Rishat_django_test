@@ -1,4 +1,3 @@
-from django.conf.urls import include
 from django.urls import path
 
 from APIStripe.views import (
@@ -7,7 +6,6 @@ from APIStripe.views import (
     CreateCheckoutSessionView,
     Success,
     Cancel,
-    CountrySpec
 )
 from main.modals import (
     RenderModalAJAX,
