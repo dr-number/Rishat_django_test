@@ -1,11 +1,14 @@
 import json
 import os
 import sys
+from django.db.models import Model
+from django.http import HttpRequest, HttpResponse
 from django.urls import resolve
 from django.shortcuts import render
 from rishat_test.settings import IS_SEPARATION_STATIC, STRIPE_PUBLIC_KEY
 
-def get_client_ip(request):
+
+def get_client_ip(request: HttpRequest) -> str:
     
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -15,13 +18,13 @@ def get_client_ip(request):
 
     return ip
 
-def getCurrentHost(request):
+def getCurrentHost(request: HttpRequest) -> str:
     return request.META['HTTP_REFERER']
 
-def get_app_name(request):
+def get_app_name(request: HttpRequest) -> str:
     return sys.modules[resolve(request.path_info).func.__module__].__package__
 
-def include_static(dir, allow, to_top=[], to_end=[], init=[], exp=''):
+def include_static(dir: str, allow: set, to_top: list=[], to_end: list=[], init: list=[], exp: str='') -> list:
 
     filelist = []
     list_dir = os.walk(dir)
@@ -68,7 +71,7 @@ def include_static(dir, allow, to_top=[], to_end=[], init=[], exp=''):
 
 
 
-def custom_render(request, template_name, data = {}):
+def custom_render(request: HttpRequest, template_name: str, data: set = {}) -> HttpResponse:
 
     STRIPE_KEY = { 'stripe_public_key' : STRIPE_PUBLIC_KEY }
 
@@ -85,7 +88,7 @@ def custom_render(request, template_name, data = {}):
     )
 
     footer_js = include_static('static/js/footer', 
-        {app_name, 'custom_user', 'init', 'main'},
+        {app_name, 'custom_user', 'init', 'main', 'basket', 'APIStripe'},
         to_end={'init.js'},
         init={'ajax_modals.js', 'question.js'}
     )
@@ -108,7 +111,7 @@ def custom_render(request, template_name, data = {}):
 
 class ModelJsonData:
 
-    def get_data(self, model, user_id, from_field):
+    def get_data(self, model: Model, user_id: int, from_field: str) -> list:
         data = model.objects.filter(user_id=user_id).values(from_field).first()
 
         if data:
@@ -117,7 +120,7 @@ class ModelJsonData:
 
         return []
 
-    def set_data(self, model, user_id, to_field, array):
+    def set_data(self, model: Model, user_id: int, to_field: str, array: list) -> int:
         
         updated_values = {
                 to_field : json.dumps(list(dict.fromkeys(array)))

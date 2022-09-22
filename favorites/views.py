@@ -16,7 +16,7 @@ from main.functions import ModelJsonData
 
 
 class RenderDeleteButton():
-    def render(self, item):
+    def render(self, item: Item) -> set:
         button = {
             "modal_id": "delete_favorites",
             "svg": "#main--res_svg--delete",
@@ -50,7 +50,7 @@ class Favorites(TemplateView):
         modelJsonData = ModelJsonData()
 
         count_products = 0
-        ids = modelJsonData.getData(FavoritesItem, 'user_id', request.user.id, 'products_id')
+        ids = modelJsonData.get_data(FavoritesItem, request.user.id, 'products_id')
 
         if not ids:
             return custom_render(request, self.template_name, {
@@ -116,10 +116,12 @@ class Delete(View):
 
         user_id = request.user.id
 
-        ids = FavoritesItem.getIds(user_id=user_id)
+        modelJsonData = ModelJsonData()
+
+        ids = modelJsonData.get_data(FavoritesItem, user_id, 'products_id')
         ids.remove(product_id)
 
-        if FavoritesItem.setIds(user_id, ids):
+        if modelJsonData.set_data(FavoritesItem, user_id, 'products_id', ids):
             status = 'success'
         else:
             status = 'failed'

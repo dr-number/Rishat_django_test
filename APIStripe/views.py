@@ -6,7 +6,6 @@ from django.views.generic import TemplateView
 from django.core.cache import cache
 import json
 
-
 from APIStripe.models import Item
 from favorites.models import FavoritesItem
 
@@ -15,12 +14,13 @@ from history.functions_history import HISTORY_STATUS_CANCEL, HISTORY_STATUS_SUCC
 from main.callback import render_button_ajax_modal
 from main.constants import COUNT_PRODUCTS_ON_PAGE
 from main.functions import ModelJsonData, custom_render
+from django.http import HttpRequest
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 class RenderBuyButton:
 
-    def render_from_basket(self, request):
+    def render_from_basket(self, request: HttpRequest) -> str:
 
         return render_button_ajax_modal(
             request=request,
@@ -31,7 +31,7 @@ class RenderBuyButton:
             run_after_init="initSelectCurentlyBasket()"
         )
 
-    def render(self, request, item):
+    def render(self, request: HttpRequest, item: Item) -> str:
 
         select_curently_params = {
             "id" : str(item.id),
@@ -213,13 +213,13 @@ class CountrySpec():
     __CACHE_NAME = 'payment_currencies'
     __TTL = 1000 * 60 * 60 * 24 * 30
 
-    def __optimization_for_cache(self, currencies):
+    def __optimization_for_cache(self, currencies: str) -> str:
         currencies = currencies.replace("[", "").replace("]", "")
         currencies = currencies.replace('\"', "")
         currencies = currencies.split(", ")
         return currencies
 
-    def get_data(self):
+    def get_data(self) -> str:
 
         payment_currencies = cache.get(self.__CACHE_NAME)
         

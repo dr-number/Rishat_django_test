@@ -7,7 +7,7 @@ HISTORY_STATUS_FAILED = "failed"
 HISTORY_STATUS_CANCEL = "cancel"
 HISTORY_STATUS_EXPECTATION = "expectation"
 
-def prepare_data(name, cost, count):
+def prepare_data(name, cost: int, count: int) -> str:
     return json.dumps(
         {
             "total_cost": str(cost),
@@ -19,7 +19,7 @@ def prepare_data(name, cost, count):
         }
     )
 
-def prepare_array(data):
+def prepare_array(data: list) -> str:
 
     result = []
     total_cost = 0

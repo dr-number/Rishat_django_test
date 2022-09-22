@@ -12,7 +12,7 @@ class BanIP():
     long_attempts = 0
 
 
-    def __init__(self, small_attempts, long_attempts):
+    def __init__(self, small_attempts: int, long_attempts: int):
         self.request = None
         self.small_attempts = small_attempts
         self.long_attempts = long_attempts

@@ -18,7 +18,7 @@ class RenderModal:
             'code' : 200,
         }
 
-    def render(self, modal_id, app_name, options):
+    def render(self, modal_id: str, app_name: str, options: list) -> str:
 
         if 'params' in options and options['params'] != '':
             params = json.loads(options['params'])

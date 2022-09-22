@@ -5,7 +5,6 @@ import logging
 
 def read_config_json(name_config):
     try:
-        #PATH_SCRIPT = os.path.abspath(__file__)
         PATH_SCRIPT_DIR = os.path.abspath(os.curdir)
         PATH_CONFIG_DIR = PATH_SCRIPT_DIR + '/main/configs'
 
