@@ -24,6 +24,7 @@ DOCKER_COMPOSE_DOWN='12'
 
 COLLECT_STATIC_FOR_PROD='13'
 RUN_TESTS='14'
+RUN_TESTS_DEBUG='15'
 #=================================End global actions===============================
 
 DIRS=(

@@ -72,7 +72,7 @@ class APIStripe{
                         'price_data': {
                             'currency': currency,
                             'product_data': {
-                            'name': name,
+                                'name': name,
                             },
                             'unit_amount': price,
                         },

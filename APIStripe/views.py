@@ -85,7 +85,7 @@ class BasketCreateCheckoutSessionView(View):
 
         except Exception as e:
             return JsonResponse({ 
-                'error': str(e)
+                'error': e
             })
 
 
