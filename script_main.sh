@@ -23,6 +23,7 @@ DOCKER_COMPOSE_UP='11'
 DOCKER_COMPOSE_DOWN='12'
 
 COLLECT_STATIC_FOR_PROD='13'
+RUN_TESTS='14'
 #=================================End global actions===============================
 
 DIRS=(
@@ -80,6 +81,7 @@ while [ "$select_do" != "$ACTION_EXIT" ]; do
     echo -e "$COLOR_TEXT_YELLOW[$DOCKER_COMPOSE_DOWN] - Docker-compose down"
 
     echo -e "$COLOR_RESET[$COLLECT_STATIC_FOR_PROD] - Collect static for prod"
+    echo -e "$COLOR_TEXT_GREEN[$RUN_TESTS] - Run tests"
     echo -e "$COLOR_RESET[$ACTION_EXIT] - exit"
 	echo $'\n'
 
@@ -137,6 +139,8 @@ while [ "$select_do" != "$ACTION_EXIT" ]; do
     elif [ "$select_do" == "$ACTION_DJANGO_MAKE_APPLY_MIGRATIONS" ]; then
         makeMigrations
         applyMigrations
+    elif [ "$select_do" == "$RUN_TESTS" ]; then
+        eval "$MANAGER_PY test"
     elif [ "$select_do" == "$ACTION_REGISTRATION_IN_DJANGO_ADMINISTRATION" ]; then
         eval "$MANAGER_PY" createsuperuser
 
