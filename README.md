@@ -41,5 +41,6 @@ If there are more than 10 products on the page, pagination is activated
 - **http://aa55-5-128-71-145.ngrok.io**
 - **https://aa55-5-128-71-145.ngrok.io**
 
+
 ## Video demonstration on YouTube
 [![Python Django. API Stripe](https://github.com/dr-number/Rishat_django_test/blob/main/z_for_read_me/screen_for_video.png)](https://youtu.be/z7UWDztJwnw)
