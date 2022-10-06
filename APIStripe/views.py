@@ -18,37 +18,6 @@ from django.http import HttpRequest
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-class RenderBuyButton:
-
-    def render_from_basket(self, request: HttpRequest) -> str:
-
-        return render_button_ajax_modal(
-            request=request,
-            modal_id="select_curently",
-            text="buy",
-            classes="btn btn-success",
-            rerender_always="1",
-            run_after_init="initSelectCurentlyBasket()"
-        )
-
-    def render(self, request: HttpRequest, item: Item) -> str:
-
-        select_curently_params = {
-            "id" : str(item.id),
-            "name" : item.name,
-            "price" : str(item.price),
-        }
-
-        return render_button_ajax_modal(
-            request=request,
-            modal_id="select_curently",
-            text="buy",
-            classes="btn btn-success",
-            rerender_always="1",
-            params=select_curently_params,
-            run_after_init="initSelectCurently()"
-        )
-
 class BasketCreateCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
 
@@ -131,6 +100,35 @@ class CreateCheckoutSessionView(View):
                 'error': str(e)
             })
 
+class CountrySpec():
+    __CACHE_NAME = 'payment_currencies'
+    __TTL = 1000 * 60 * 60 * 24 * 30
+
+    def __optimization_for_cache(self, currencies: str) -> str:
+        currencies = currencies.replace("[", "").replace("]", "")
+        currencies = currencies.replace('\"', "")
+        currencies = currencies.split(", ")
+        return currencies
+
+    def get_data(self) -> str:
+
+        payment_currencies = cache.get(self.__CACHE_NAME)
+        
+        if payment_currencies:
+            return json.dumps(payment_currencies)
+
+        data = stripe.CountrySpec.retrieve("US")
+        payment_currencies = data["supported_payment_currencies"]
+
+        if not payment_currencies:
+            return None
+
+        payment_currencies = self.__optimization_for_cache(json.dumps(payment_currencies))
+
+        cache.set(self.__CACHE_NAME, payment_currencies, self.__TTL)
+        return json.dumps(payment_currencies)
+
+
 
 class Success(TemplateView):
     template_name = "APIStripe/success.html"
@@ -153,6 +151,37 @@ class Cancel(TemplateView):
         return custom_render(request, self.template_name, {
             'title' : 'Cancel'
         })
+
+class RenderBuyButton:
+
+    def render_from_basket(self, request: HttpRequest) -> str:
+
+        return render_button_ajax_modal(
+            request=request,
+            modal_id="select_curently",
+            text="buy",
+            classes="btn btn-success",
+            rerender_always="1",
+            run_after_init="initSelectCurentlyBasket()"
+        )
+
+    def render(self, request: HttpRequest, item: Item) -> str:
+
+        select_curently_params = {
+            "id" : str(item.id),
+            "name" : item.name,
+            "price" : str(item.price),
+        }
+
+        return render_button_ajax_modal(
+            request=request,
+            modal_id="select_curently",
+            text="buy",
+            classes="btn btn-success",
+            rerender_always="1",
+            params=select_curently_params,
+            run_after_init="initSelectCurently()"
+        )
 
 
 class ProductItem(TemplateView):
@@ -207,34 +236,3 @@ class Products(TemplateView):
             'count' : len(products),
             'currencies' : currencies
             })
-
-
-class CountrySpec():
-    __CACHE_NAME = 'payment_currencies'
-    __TTL = 1000 * 60 * 60 * 24 * 30
-
-    def __optimization_for_cache(self, currencies: str) -> str:
-        currencies = currencies.replace("[", "").replace("]", "")
-        currencies = currencies.replace('\"', "")
-        currencies = currencies.split(", ")
-        return currencies
-
-    def get_data(self) -> str:
-
-        payment_currencies = cache.get(self.__CACHE_NAME)
-        
-        if payment_currencies:
-            return json.dumps(payment_currencies)
-
-        data = stripe.CountrySpec.retrieve("US")
-        payment_currencies = data["supported_payment_currencies"]
-
-        if not payment_currencies:
-            return None
-
-        payment_currencies = self.__optimization_for_cache(json.dumps(payment_currencies))
-
-        cache.set(self.__CACHE_NAME, payment_currencies, self.__TTL)
-        return json.dumps(payment_currencies)
-
-

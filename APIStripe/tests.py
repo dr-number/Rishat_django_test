@@ -1,7 +1,7 @@
 import json
+import time
 from django.test import TestCase, RequestFactory
 from django.contrib.auth import get_user_model
-from django.http import JsonResponse
 
 from APIStripe.models import Item
 from APIStripe.views import (
@@ -80,11 +80,16 @@ class APIStripeTestcases(TestCase):
         request.META['HTTP_USER_AGENT'] = 'testing_agent'
 
         request.user = self.user
+
+        start = time.perf_counter()
         response = CreateCheckoutSessionView.as_view()(request, id=product['id'])
+        result_time = time.perf_counter() - start
 
         result_test = self.get_result_stripe_api(response.content)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result_test, True)
+
+        self.color_print("\nCreateCheckoutSessionView execution time: " + str(result_time))
 
     def test_basket_create_checkout_session_view(self):
 
@@ -111,8 +116,13 @@ class APIStripeTestcases(TestCase):
         request.META['HTTP_USER_AGENT'] = 'testing_agent'
 
         request.user = self.user
+
+        start = time.perf_counter()
         response = BasketCreateCheckoutSessionView.as_view()(request)
+        result_time = time.perf_counter() - start
 
         result_test = self.get_result_stripe_api(response.content)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(result_test, True)
+
+        self.color_print("\nBasketCreateCheckoutSessionView execution time: " + str(result_time))
