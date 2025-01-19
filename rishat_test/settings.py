@@ -167,8 +167,9 @@ STRIPE_SECRET_KEY = "sk_test_51LgR6IHVRJovbZDJrxuLBVgnlrkWu2TN0Bi8hHgJdTVu8sAWeE
 STRIPE_WEBHOOK_SECRET = ""
 
 TUNEL_PREFIX = 'aa55'
+TUNEL_POSTFIX = '5'
 
 CSRF_TRUSTED_ORIGINS = [
-        'http://' + TUNEL_PREFIX + '-5-128-71-145.ngrok.io',
-        'https://' + TUNEL_PREFIX + '-5-128-71-145.ngrok.io'
+        'http://' + TUNEL_PREFIX + '-' + TUNEL_POSTFIX + '.ngrok.io',
+        'https://' + TUNEL_PREFIX + '-' + TUNEL_POSTFIX + '.ngrok.io'
     ]

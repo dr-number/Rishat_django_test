@@ -19,7 +19,6 @@ class APIStripe{
 
     initCheckOut(){
         let data;
-
         document.querySelectorAll(".checkout-button").forEach(button => {
             button.onclick = () => {
 
